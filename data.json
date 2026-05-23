@@ -1,0 +1,252 @@
+{
+  "tree": [
+    {
+      "id": "home",
+      "name": "Home page",
+      "children": [
+        {
+          "id": "win",
+          "name": "Product (Windows)",
+          "children": [
+            {
+              "id": "win-pdr",
+              "name": "PDR",
+              "pageId": "page-win-pdr"
+            },
+            {
+              "id": "win-ds",
+              "name": "DS",
+              "children": [
+                {
+                  "id": "win-ds-ov",
+                  "name": "Overview",
+                  "pageId": "page-win-ds-ov"
+                },
+                {
+                  "id": "win-ds-specs",
+                  "name": "Specs",
+                  "pageId": "page-win-ds-specs"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "mac",
+          "name": "Product (Mac)",
+          "children": [
+            {
+              "id": "mac-pdr",
+              "name": "PDR",
+              "pageId": "page-mac-pdr"
+            },
+            {
+              "id": "mac-phd",
+              "name": "PHD",
+              "pageId": "page-mac-phd"
+            }
+          ]
+        },
+        {
+          "id": "app",
+          "name": "Product (APP)",
+          "children": [
+            {
+              "id": "app-pdr",
+              "name": "PDR",
+              "pageId": "page-app-pdr"
+            }
+          ]
+        },
+        {
+          "id": "dl",
+          "name": "Downloads",
+          "pageId": "page-dl"
+        },
+        {
+          "id": "support",
+          "name": "Support & Learning",
+          "pageId": "page-support"
+        }
+      ]
+    }
+  ],
+  "pages": {
+    "page-win-pdr": {
+      "title": "PowerDirector 365 (Windows) - PDR",
+      "url": "https://www.cyberlink.com/products/powerdirector-ultra/features_en_US.html",
+      "updatedAt": "2026-05-23",
+      "screenshot": "https://raw.githubusercontent.com/edith-lai/tracking-doc/main/screenshots/page-win-pdr-1779526721375.png",
+      "markers": [
+        {
+          "n": 1,
+          "x": 18.2,
+          "y": 6.2,
+          "name": "Top banner ribbon (P1)",
+          "at": "",
+          "ga": "data-ga-event=\"inbound_click_buy_button\"\ndata-ga-click_point=\"Promo_Ribbon\"\ndata-ga-product=\"PowerDirector\"\ndata-ga-type=\"Text\"",
+          "ca": "data-clt-event=\"inbound_click_buy_button\"\ndata-clt-click_point=\"Promo_Ribbon\"\ndata-clt-product=\"PowerDirector\"\ndata-clt-type=\"Text\""
+        },
+        {
+          "n": 2,
+          "x": 24,
+          "y": 38,
+          "name": "Top banner Buy button (P1)",
+          "at": "data-at-location=\"top-banner\"\ndata-at-id=\"buy-button\"",
+          "ga": "data-ga-event=\"inbound_click_buy_button\"\ndata-ga-click_point=\"Top_Banner\"\ndata-ga-product=\"PowerDirector\"\ndata-ga-type=\"Button_buy_now\"",
+          "ca": "data-clt-event=\"inbound_click_buy_button\"\ndata-clt-click_point=\"Top_Banner\"\ndata-clt-product=\"PowerDirector\"\ndata-clt-type=\"Button_buy_now\""
+        },
+        {
+          "n": 3,
+          "x": 12,
+          "y": 38,
+          "name": "Top banner D/L (P1)",
+          "at": "data-at-location=\"top-banner\"\ndata-at-id=\"download-button\"",
+          "ga": "data-ga-event=\"inbound_click_free_download\"\ndata-ga-click_point=\"Top_Banner\"\ndata-ga-product=\"PowerDirector\"\ndata-ga-type=\"Button_free_download\"",
+          "ca": "data-clt-event=\"inbound_click_free_download\"\ndata-clt-click_point=\"Top_Banner\"\ndata-clt-product=\"PowerDirector\"\ndata-clt-type=\"Button_free_download\""
+        }
+      ]
+    },
+    "page-win-ds-ov": {
+      "title": "Director Suite Overview (Windows)",
+      "url": "",
+      "updatedAt": "2026-04-22",
+      "screenshot": null,
+      "markers": [
+        {
+          "n": 1,
+          "x": 20,
+          "y": 30,
+          "name": "Hero CTA",
+          "at": "data-at-id=\"hero-cta\"",
+          "ga": "data-ga-event=\"hero_click\"\ndata-ga-product=\"DirectorSuite\"",
+          "ca": "data-clt-event=\"hero_click\"\ndata-clt-product=\"DirectorSuite\""
+        }
+      ]
+    },
+    "page-win-ds-specs": {
+      "title": "Director Suite Specs",
+      "url": "",
+      "updatedAt": "2026-03-15",
+      "screenshot": null,
+      "markers": []
+    },
+    "page-mac-pdr": {
+      "title": "PowerDirector for Mac",
+      "url": "",
+      "updatedAt": "2026-05-01",
+      "screenshot": null,
+      "markers": [
+        {
+          "n": 1,
+          "x": 50,
+          "y": 20,
+          "name": "Mac Download button",
+          "at": "data-at-id=\"mac-dl\"",
+          "ga": "data-ga-event=\"mac_download\"",
+          "ca": "data-clt-event=\"mac_download\""
+        }
+      ]
+    },
+    "page-mac-phd": {
+      "title": "PhotoDirector for Mac",
+      "url": "",
+      "updatedAt": "2026-02-28",
+      "screenshot": null,
+      "markers": []
+    },
+    "page-app-pdr": {
+      "title": "PowerDirector Mobile App",
+      "url": "",
+      "updatedAt": "2026-04-10",
+      "screenshot": null,
+      "markers": []
+    },
+    "page-dl": {
+      "title": "Downloads",
+      "url": "",
+      "updatedAt": "2026-01-20",
+      "screenshot": null,
+      "markers": []
+    },
+    "page-support": {
+      "title": "Support & Learning",
+      "url": "",
+      "updatedAt": "2026-03-05",
+      "screenshot": null,
+      "markers": []
+    }
+  },
+  "glossary": [
+    {
+      "id": "g1",
+      "type": "Auto",
+      "event": "page_view",
+      "definition": "each time the page loads or the browser history state is changed by the active site",
+      "parameter": "page_location (collected by GA4)",
+      "value": "(page URL)",
+      "note": "Use this event to replace \"impression\"",
+      "resource": ""
+    },
+    {
+      "id": "g2",
+      "type": "Auto",
+      "event": "file_download",
+      "definition": "when a user clicks a link leading to a file (with a common file extension) of the following types: document, text, executable, presentation, compressed file, video, audio",
+      "parameter": "file_extension, file_name, link_classes, link_domain, link_id, link_text, link_url (collected by GA4)",
+      "value": "(file name)",
+      "note": "*Need to check if all downloader file name is different (or file URL)",
+      "resource": ""
+    },
+    {
+      "id": "g3",
+      "type": "Custom",
+      "event": "page_view_cust",
+      "definition": "each time the page or popup loads or shows",
+      "parameter": "inbound_popup",
+      "value": "Purchase_Popup\nCombo_Popup\n!Purchase_Popup_New",
+      "note": "this event seems to be more for the popup, should just change the name",
+      "resource": ""
+    },
+    {
+      "id": "g4",
+      "type": "Custom",
+      "event": "page_view_cust",
+      "definition": "",
+      "parameter": "product",
+      "value": "DirectorSuite\nPowerDirector\nPowerDirectorMac\nPowerDirectorBusiness\nPromeo\nPromeoApp\nPhotoDirector\nPhotoDirectorMac\nPhotoDirectorApp\nAudioDirector\nColorDirector\nYouCam\nPowerPlayer\nPerfectCam\nPowerDirector_Ultimate",
+      "note": "*PDR Ultimate is for Combo_Popup",
+      "resource": ""
+    },
+    {
+      "id": "g5",
+      "type": "Custom",
+      "event": "page_view_cust",
+      "definition": "",
+      "parameter": "click_point",
+      "value": "Top_Banner\nBottom_Banner\nSticky_Header\n!In_Page\nSticky_Footer\nFloating\n!Direct",
+      "note": "\"Direct\" parameter value is for those who landed on the popup directly",
+      "resource": ""
+    },
+    {
+      "id": "g6",
+      "type": "Custom",
+      "event": "inbound_click_buy_button",
+      "definition": "Inbound click (click on buttons within the domain) on buy buttons and open popup (for 365) or direct to shopping cart (for perpetual)",
+      "parameter": "click_point",
+      "value": "Top_Banner\nBottom_Banner\nSticky_Header\n!In_Page_(section name)\nSticky_Footer\nFloating",
+      "note": "*in_body change to in_page since there is also CTA button in product page. Buttons on Store page will also be categorized in this parameter value",
+      "resource": ""
+    },
+    {
+      "id": "g7",
+      "type": "Custom",
+      "event": "inbound_click_buy_button",
+      "definition": "",
+      "parameter": "page_location (collected by GA4)",
+      "value": "(page URL)",
+      "note": "",
+      "resource": ""
+    }
+  ]
+}
