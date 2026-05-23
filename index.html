@@ -1,0 +1,1283 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tracking Code Documentation System</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.40.0/tabler-icons.min.css">
+<style>
+:root{
+  --color-background-primary:#ffffff;
+  --color-background-secondary:#f5f4ef;
+  --color-background-tertiary:#ebe9e0;
+  --color-background-info:#E6F1FB;
+  --color-background-success:#EAF3DE;
+  --color-background-danger:#FCEBEB;
+  --color-text-primary:#1f1e1d;
+  --color-text-secondary:#5F5E5A;
+  --color-text-tertiary:#888780;
+  --color-text-info:#185FA5;
+  --color-text-success:#3B6D11;
+  --color-text-danger:#A32D2D;
+  --color-border-tertiary:rgba(0,0,0,0.12);
+  --color-border-secondary:rgba(0,0,0,0.22);
+  --color-border-primary:rgba(0,0,0,0.35);
+  --color-border-info:#85B7EB;
+  --color-border-danger:#F09595;
+  --font-sans:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Microsoft JhengHei",sans-serif;
+  --font-mono:"SF Mono","Consolas","Monaco",monospace;
+  --border-radius-md:8px;
+  --border-radius-lg:12px;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --color-background-primary:#1f1e1d;
+    --color-background-secondary:#2a2927;
+    --color-background-tertiary:#35332f;
+    --color-text-primary:#f5f4ef;
+    --color-text-secondary:#b4b2a9;
+    --color-text-tertiary:#888780;
+    --color-border-tertiary:rgba(255,255,255,0.12);
+    --color-border-secondary:rgba(255,255,255,0.22);
+  }
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:var(--font-sans);background:var(--color-background-tertiary);color:var(--color-text-primary);min-height:100vh;padding:20px}
+.tc-app{max-width:1400px;margin:0 auto}
+.tc-app-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.tc-app-title{font-size:20px;font-weight:500;margin:0}
+.tc-app-title small{font-size:12px;color:var(--color-text-tertiary);font-weight:400;margin-left:8px}
+.tc-app-actions{display:flex;gap:8px}
+.tc-layout{display:grid;grid-template-columns:280px minmax(0,1fr);gap:0;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);overflow:hidden;background:var(--color-background-primary);position:relative}
+.tc-sidebar{border-right:0.5px solid var(--color-border-tertiary);background:var(--color-background-secondary);padding:14px;overflow-y:auto;height:calc(100vh - 140px);min-height:600px}
+.tc-main{padding:18px 22px;overflow-y:auto;height:calc(100vh - 140px);min-height:600px;min-width:0;position:relative}
+.tc-search{width:100%;padding:7px 10px;font-size:13px;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);background:var(--color-background-primary);color:var(--color-text-primary);font-family:inherit}
+.tc-btn{padding:6px 10px;font-size:12px;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);background:var(--color-background-primary);color:var(--color-text-primary);cursor:pointer;display:inline-flex;align-items:center;gap:4px;white-space:nowrap;font-family:inherit;transition:all 0.1s}
+.tc-btn:hover{background:var(--color-background-secondary)}
+.tc-btn:active{transform:scale(0.98)}
+.tc-btn.tc-btn-primary{background:var(--color-background-info);color:var(--color-text-info);border-color:var(--color-border-info)}
+.tc-btn.tc-btn-danger{color:var(--color-text-danger);border-color:var(--color-border-danger)}
+.tc-btn.tc-btn-success{background:var(--color-background-success);color:var(--color-text-success)}
+.tc-tree-row{display:flex;align-items:center;gap:4px;padding:5px 6px;border-radius:var(--border-radius-md);cursor:pointer;font-size:13px}
+.tc-tree-row:hover{background:var(--color-background-primary)}
+.tc-tree-row.active{background:var(--color-background-info);color:var(--color-text-info)}
+.tc-tree-row.active .tc-tree-label{font-weight:500}
+.tc-chevron{width:14px;display:inline-flex;justify-content:center;color:var(--color-text-tertiary);font-size:10px}
+.tc-tree-children{margin-left:14px;border-left:0.5px solid var(--color-border-tertiary);padding-left:4px}
+.tc-tree-label{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tc-tree-count{font-size:11px;color:var(--color-text-tertiary);background:var(--color-background-primary);padding:1px 6px;border-radius:8px}
+.tc-tree-row.active .tc-tree-count{background:rgba(255,255,255,0.4)}
+.tc-glossary-entry{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:var(--border-radius-md);cursor:pointer;font-size:13px;font-weight:500;background:var(--color-background-info);color:var(--color-text-info);border:0.5px solid var(--color-border-info)}
+.tc-glossary-entry:hover{filter:brightness(0.97)}
+.tc-glossary-entry.active{background:var(--color-text-info);color:#fff;border-color:var(--color-text-info)}
+.tc-glossary-entry .ti{font-size:16px}
+.tc-glossary-entry span:nth-child(2){flex:1}
+.tc-glossary-badge{font-size:11px;font-weight:400;background:rgba(255,255,255,0.4);padding:1px 6px;border-radius:8px}
+.tc-glossary-entry:not(.active) .tc-glossary-badge{background:rgba(255,255,255,0.6)}
+.tc-sidebar-divider{height:0.5px;background:var(--color-border-tertiary);margin:12px 0}
+.tc-tree-menu-btn{opacity:0;border:none;background:transparent;color:var(--color-text-tertiary);cursor:pointer;padding:2px 4px;border-radius:4px;font-size:14px;line-height:1;flex-shrink:0}
+.tc-tree-row:hover .tc-tree-menu-btn{opacity:1}
+.tc-tree-menu-btn:hover{background:rgba(0,0,0,0.08);color:var(--color-text-primary)}
+.tc-tree-row.active .tc-tree-menu-btn{color:var(--color-text-info)}
+.tc-node-menu{position:fixed;background:var(--color-background-primary);border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);padding:4px;z-index:30;box-shadow:0 4px 12px rgba(0,0,0,0.15);min-width:160px}
+.tc-node-menu-item{padding:6px 10px;font-size:12px;cursor:pointer;border-radius:4px;display:flex;align-items:center;gap:6px;color:var(--color-text-primary)}
+.tc-node-menu-item:hover{background:var(--color-background-secondary)}
+.tc-node-menu-item.danger{color:var(--color-text-danger)}
+.tc-node-menu-divider{height:0.5px;background:var(--color-border-tertiary);margin:4px 2px}
+.tc-glossary-table{width:100%;border-collapse:collapse;font-size:12px;table-layout:fixed;border:0.5px solid var(--color-border-tertiary)}
+.tc-glossary-table th,.tc-glossary-table td{text-align:left;padding:8px 10px;border:0.5px solid var(--color-border-tertiary);vertical-align:top;word-break:break-word;line-height:1.5}
+.tc-glossary-table th{font-size:11px;font-weight:500;color:var(--color-text-primary);background:var(--color-background-secondary);text-transform:uppercase;letter-spacing:0.3px;position:sticky;top:0;z-index:2}
+.tc-glossary-table td{background:var(--color-background-primary)}
+.tc-glossary-table td.editable{cursor:cell}
+.tc-glossary-table td.editable:hover{background:var(--color-background-info);outline:1px solid var(--color-border-info);outline-offset:-1px}
+.tc-glossary-table td.editing{padding:0;background:var(--color-background-primary);outline:2px solid var(--color-text-info);outline-offset:-2px}
+.tc-glossary-table td.editing textarea,.tc-glossary-table td.editing input{width:100%;height:100%;min-height:60px;border:none;background:transparent;color:var(--color-text-primary);font:inherit;padding:8px 10px;resize:none;outline:none;font-family:inherit;line-height:1.5;display:block}
+.tc-glossary-tag{display:inline-block;padding:1px 8px;border-radius:10px;font-size:10px;font-weight:500;white-space:nowrap}
+.tc-glossary-tag.auto{background:#FEF1D7;color:#8C5800}
+.tc-glossary-tag.custom{background:#DCE9F7;color:#1A4F8B}
+.tc-glossary-row-actions{position:sticky;right:0;width:40px;text-align:center;background:var(--color-background-primary)!important;padding:4px!important}
+.tc-glossary-rowdel{opacity:0;background:transparent;border:none;color:var(--color-text-danger);cursor:pointer;font-size:13px;padding:4px 6px;border-radius:4px}
+.tc-glossary-table tr:hover .tc-glossary-rowdel{opacity:1}
+.tc-glossary-rowdel:hover{background:var(--color-background-danger)}
+.tc-glossary-link{color:var(--color-text-info);text-decoration:none}
+.tc-glossary-link:hover{text-decoration:underline}
+.tc-glossary-value-pill{display:inline-block;background:var(--color-background-secondary);padding:1px 6px;border-radius:4px;font-family:var(--font-mono);font-size:10px;margin:1px 2px 1px 0}
+.tc-glossary-value-pill.highlight{background:#FCEBEB;color:var(--color-text-danger)}
+.tc-glossary-controls{display:flex;gap:8px;margin-bottom:12px;align-items:center;flex-wrap:wrap}
+.tc-glossary-search{flex:1;min-width:200px;max-width:360px;padding:7px 10px;font-size:13px;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);background:var(--color-background-primary);color:var(--color-text-primary);font-family:inherit}
+.tc-glossary-empty-search{text-align:center;padding:32px;color:var(--color-text-tertiary);font-size:13px}
+.tc-page-header{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:12px;flex-wrap:wrap}
+.tc-page-title{font-size:18px;font-weight:500;margin:0}
+.tc-page-meta{font-size:12px;color:var(--color-text-tertiary);margin-top:2px}
+.tc-mode-tabs{display:inline-flex;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);overflow:hidden}
+.tc-mode-sticky{position:sticky;top:0;z-index:6;background:var(--color-background-primary);padding:8px 0;margin:0 0 12px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:flex-end;border-bottom:0.5px solid var(--color-border-tertiary)}
+.tc-mode-tab{padding:6px 12px;font-size:12px;background:transparent;border:none;cursor:pointer;color:var(--color-text-secondary);border-right:0.5px solid var(--color-border-tertiary);font-family:inherit}
+.tc-mode-tab:last-child{border-right:none}
+.tc-mode-tab.active{background:var(--color-background-info);color:var(--color-text-info);font-weight:500}
+.tc-screenshot-wrap{position:relative;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);overflow:hidden;background:var(--color-background-tertiary);margin-bottom:12px}
+.tc-screenshot{display:block;width:100%;height:auto;user-select:none;-webkit-user-drag:none}
+.tc-placeholder{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:64px 16px;color:var(--color-text-tertiary);font-size:13px;text-align:center;gap:8px}
+.tc-marker{position:absolute;width:26px;height:26px;border-radius:50%;background:#E24B4A;color:#fff;font-size:12px;font-weight:500;display:flex;align-items:center;justify-content:center;cursor:pointer;transform:translate(-50%,-50%);border:2px solid #fff;box-shadow:0 0 0 1px rgba(0,0,0,0.1);transition:transform 0.1s, background 0.1s}
+.tc-marker:hover{background:#A32D2D;z-index:5;transform:translate(-50%,-50%) scale(1.15)}
+.tc-marker.selected{background:#185FA5;box-shadow:0 0 0 3px rgba(24,95,165,0.35);z-index:6}
+.tc-marker.edit-mode{background:#3B6D11;cursor:move}
+.tc-marker.edit-mode:hover{background:#27500A}
+.tc-marker.dragging{opacity:0.7;cursor:grabbing;z-index:9;transition:none;box-shadow:0 0 0 4px rgba(59,109,17,0.4)}
+.tc-tooltip{position:absolute;z-index:10;background:var(--color-background-primary);border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);padding:10px 12px;font-size:11px;width:320px;color:var(--color-text-primary);box-shadow:0 4px 12px rgba(0,0,0,0.12)}
+.tc-tooltip-title{font-size:12px;font-weight:500;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center;gap:6px}
+.tc-tooltip-section{margin-top:6px}
+.tc-tooltip-section-label{font-size:10px;font-weight:500;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:0.3px;margin-bottom:2px}
+.tc-tooltip-code{font-family:var(--font-mono);font-size:10px;background:var(--color-background-secondary);padding:5px 7px;border-radius:4px;white-space:pre-wrap;word-break:break-all;max-height:90px;overflow-y:auto;line-height:1.5}
+.tc-tooltip-actions{display:flex;gap:4px;margin-top:8px;padding-top:8px;border-top:0.5px solid var(--color-border-tertiary);flex-wrap:wrap}
+.tc-detail-table{width:100%;border-collapse:collapse;font-size:12px;margin-top:8px;table-layout:fixed}
+.tc-detail-table th,.tc-detail-table td{text-align:left;padding:8px 10px;border-bottom:0.5px solid var(--color-border-tertiary);vertical-align:top;word-break:break-word}
+.tc-detail-table th{font-size:11px;font-weight:500;color:var(--color-text-secondary);background:var(--color-background-secondary);text-transform:uppercase;letter-spacing:0.3px}
+.tc-detail-table tbody tr{cursor:pointer}
+.tc-detail-table tbody tr:hover{background:var(--color-background-secondary)}
+.tc-detail-table tr.selected td{background:var(--color-background-info)!important}
+.tc-num-cell{width:36px;text-align:center;font-weight:500}
+.tc-name-cell{width:22%}
+.tc-code{font-family:var(--font-mono);font-size:11px;display:block;line-height:1.5}
+.tc-code-line{display:flex;justify-content:space-between;align-items:flex-start;gap:6px;padding:1px 0}
+.tc-code-key{color:var(--color-text-secondary)}
+.tc-copy-btn{opacity:0.4;border:none;background:transparent;color:var(--color-text-tertiary);cursor:pointer;padding:0 4px;font-size:11px;flex-shrink:0;font-family:inherit}
+.tc-code-line:hover .tc-copy-btn{opacity:1}
+.tc-copy-btn:hover{color:var(--color-text-info)}
+.tc-side-panel{position:absolute;top:0;right:0;width:360px;height:100%;background:var(--color-background-primary);border-left:0.5px solid var(--color-border-secondary);padding:18px 20px;overflow-y:auto;z-index:8;box-shadow:-4px 0 12px rgba(0,0,0,0.06)}
+.tc-side-close{position:absolute;top:12px;right:12px;background:transparent;border:none;cursor:pointer;color:var(--color-text-tertiary);font-size:16px;padding:4px}
+.tc-modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:100}
+.tc-modal-backdrop.hidden{display:none}
+.tc-modal{background:var(--color-background-primary);border-radius:var(--border-radius-lg);padding:22px;width:90%;max-width:540px;max-height:85vh;overflow-y:auto}
+.tc-modal h3{margin:0 0 14px;font-size:16px;font-weight:500}
+.tc-form-row{margin-bottom:11px}
+.tc-form-row label{display:block;font-size:12px;color:var(--color-text-secondary);margin-bottom:4px}
+.tc-form-row input,.tc-form-row textarea,.tc-form-row select{width:100%;padding:7px 10px;font-size:13px;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);background:var(--color-background-primary);color:var(--color-text-primary);font-family:inherit}
+.tc-form-row textarea{font-family:var(--font-mono);font-size:11px;min-height:70px;resize:vertical}
+.tc-form-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:16px}
+.tc-edit-section{border:0.5px dashed var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:12px;margin-top:12px;background:var(--color-background-secondary)}
+.tc-edit-section h4{margin:0 0 10px;font-size:13px;font-weight:500;display:flex;align-items:center;gap:6px}
+.tc-edit-sticky{position:sticky;top:-1px;z-index:7;background:var(--color-background-success);border:0.5px solid var(--color-text-success);border-radius:var(--border-radius-md);padding:10px 14px;margin-bottom:14px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;box-shadow:0 2px 8px rgba(0,0,0,0.04)}
+.tc-edit-sticky-label{font-size:12px;font-weight:500;color:var(--color-text-success);display:flex;align-items:center;gap:5px;margin-right:auto}
+.tc-edit-sticky .tc-btn{font-size:12px}
+.tc-status-bar{display:flex;justify-content:space-between;align-items:center;font-size:11px;color:var(--color-text-tertiary);padding:8px 14px;background:var(--color-background-secondary);border-top:0.5px solid var(--color-border-tertiary);gap:12px;flex-wrap:wrap}
+.tc-cloud-status{display:inline-flex;align-items:center;gap:6px;font-size:11px}
+.tc-cloud-dot{width:8px;height:8px;border-radius:50%;background:var(--color-text-tertiary)}
+.tc-cloud-dot.synced{background:#3B6D11}
+.tc-cloud-dot.dirty{background:#D17C00}
+.tc-cloud-dot.syncing{background:#185FA5;animation:tcPulse 1s ease infinite}
+.tc-cloud-dot.error{background:#A32D2D}
+.tc-cloud-dot.offline{background:#888780}
+@keyframes tcPulse{0%,100%{opacity:1}50%{opacity:0.3}}
+.tc-cloud-actions{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.tc-readonly-banner{background:var(--color-background-info);color:var(--color-text-info);padding:8px 14px;text-align:center;font-size:12px;border-bottom:0.5px solid var(--color-border-info)}
+.tc-token-help{font-size:11px;color:var(--color-text-tertiary);line-height:1.6;background:var(--color-background-secondary);padding:10px;border-radius:6px;margin-top:8px}
+.tc-token-help code{background:var(--color-background-primary);padding:1px 5px;border-radius:3px;font-size:10px}
+.tc-lock-indicator{display:inline-flex;align-items:center;gap:4px}
+.tc-search-results{position:absolute;background:var(--color-background-primary);border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);margin-top:4px;max-height:260px;overflow-y:auto;z-index:15;width:calc(100% - 28px);box-shadow:0 4px 12px rgba(0,0,0,0.1)}
+.tc-search-result-item{padding:8px 10px;font-size:12px;cursor:pointer;border-bottom:0.5px solid var(--color-border-tertiary)}
+.tc-search-result-item:hover{background:var(--color-background-secondary)}
+.tc-search-result-path{color:var(--color-text-tertiary);font-size:10px;margin-top:2px}
+.tc-empty-state{padding:48px 16px;text-align:center;color:var(--color-text-tertiary);font-size:13px}
+.tc-placing-hint{position:absolute;top:8px;left:50%;transform:translateX(-50%);background:var(--color-background-info);color:var(--color-text-info);padding:6px 14px;border-radius:var(--border-radius-md);font-size:12px;z-index:10;font-weight:500;box-shadow:0 2px 8px rgba(0,0,0,0.1)}
+.tc-edit-hint{font-size:11px;color:var(--color-text-success);margin-top:8px;display:flex;align-items:center;gap:4px}
+</style>
+</head>
+<body>
+<div class="tc-app">
+  <header class="tc-app-header">
+    <h1 class="tc-app-title">Tracking Code Documentation <small>內部追蹤碼文件系統</small></h1>
+    <div class="tc-app-actions" id="tcAppActions"></div>
+  </header>
+  <div id="tcReadonlyBanner" class="tc-readonly-banner" style="display:none">
+    <i class="ti ti-eye"></i> 您正在以「檢視模式」瀏覽此文件 · 維護者請點右上「設定」輸入 GitHub Token
+  </div>
+  <div style="position:relative">
+    <div class="tc-layout">
+      <aside class="tc-sidebar">
+        <div style="position:relative;margin-bottom:12px">
+          <input type="text" class="tc-search" id="tcSearch" placeholder="🔍 搜尋頁面或追蹤碼..." />
+          <div id="tcSearchResults" class="tc-search-results" style="display:none"></div>
+        </div>
+        <div id="tcGlossaryEntry" class="tc-glossary-entry"><i class="ti ti-book-2"></i><span>追蹤碼規範</span><span class="tc-glossary-badge" id="tcGlossaryCount"></span></div>
+        <div class="tc-sidebar-divider"></div>
+        <div id="tcTreeActions" style="display:none;margin-bottom:8px"></div>
+        <div id="tcTree"></div>
+      </aside>
+      <main class="tc-main" id="tcMain"></main>
+    </div>
+    <div class="tc-status-bar">
+      <div style="display:flex;gap:14px;align-items:center;flex-wrap:wrap">
+        <span class="tc-lock-indicator" id="tcLockStatus"><i class="ti ti-lock"></i><span>檢視模式</span></span>
+        <span class="tc-cloud-status" id="tcCloudStatus"><span class="tc-cloud-dot"></span><span>未連線</span></span>
+      </div>
+      <div class="tc-cloud-actions" id="tcCloudActions"></div>
+    </div>
+  </div>
+  <div class="tc-modal-backdrop hidden" id="tcModal"><div class="tc-modal" id="tcModalContent"></div></div>
+</div>
+
+<script>
+(function(){
+const STORAGE_KEY='tc-doc-data-v3';
+const TOKEN_KEY='tc-gh-token';
+const PM_PASSWORD='pm2025';
+const GH_OWNER='edith-lai';
+const GH_REPO='tracking-doc';
+const GH_BRANCH='main';
+const GH_DATA_PATH='data.json';
+const GH_IMG_DIR='screenshots';
+const GH_RAW=`https://raw.githubusercontent.com/${GH_OWNER}/${GH_REPO}/${GH_BRANCH}/`;
+const GH_API=`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}`;
+
+const seedData={
+  tree:[{id:'home',name:'Home page',children:[
+    {id:'win',name:'Product (Windows)',children:[
+      {id:'win-pdr',name:'PDR',pageId:'page-win-pdr'},
+      {id:'win-ds',name:'DS',children:[
+        {id:'win-ds-ov',name:'Overview',pageId:'page-win-ds-ov'},
+        {id:'win-ds-specs',name:'Specs',pageId:'page-win-ds-specs'}]}]},
+    {id:'mac',name:'Product (Mac)',children:[
+      {id:'mac-pdr',name:'PDR',pageId:'page-mac-pdr'},
+      {id:'mac-phd',name:'PHD',pageId:'page-mac-phd'}]},
+    {id:'app',name:'Product (APP)',children:[{id:'app-pdr',name:'PDR',pageId:'page-app-pdr'}]},
+    {id:'dl',name:'Downloads',pageId:'page-dl'},
+    {id:'support',name:'Support & Learning',pageId:'page-support'}]}],
+  pages:{
+    'page-win-pdr':{title:'PowerDirector 365 (Windows) - PDR',url:'https://www.cyberlink.com/products/powerdirector-ultra/features_en_US.html',updatedAt:'2026-05-10',screenshot:null,markers:[
+      {n:1,x:8,y:6,name:'Top banner ribbon (P1)',at:'',ga:'data-ga-event="inbound_click_buy_button"\ndata-ga-click_point="Promo_Ribbon"\ndata-ga-product="PowerDirector"\ndata-ga-type="Text"',ca:'data-clt-event="inbound_click_buy_button"\ndata-clt-click_point="Promo_Ribbon"\ndata-clt-product="PowerDirector"\ndata-clt-type="Text"'},
+      {n:2,x:24,y:38,name:'Top banner Buy button (P1)',at:'data-at-location="top-banner"\ndata-at-id="buy-button"',ga:'data-ga-event="inbound_click_buy_button"\ndata-ga-click_point="Top_Banner"\ndata-ga-product="PowerDirector"\ndata-ga-type="Button_buy_now"',ca:'data-clt-event="inbound_click_buy_button"\ndata-clt-click_point="Top_Banner"\ndata-clt-product="PowerDirector"\ndata-clt-type="Button_buy_now"'},
+      {n:3,x:12,y:38,name:'Top banner D/L (P1)',at:'data-at-location="top-banner"\ndata-at-id="download-button"',ga:'data-ga-event="inbound_click_free_download"\ndata-ga-click_point="Top_Banner"\ndata-ga-product="PowerDirector"\ndata-ga-type="Button_free_download"',ca:'data-clt-event="inbound_click_free_download"\ndata-clt-click_point="Top_Banner"\ndata-clt-product="PowerDirector"\ndata-clt-type="Button_free_download"'}]},
+    'page-win-ds-ov':{title:'Director Suite Overview (Windows)',url:'',updatedAt:'2026-04-22',screenshot:null,markers:[{n:1,x:20,y:30,name:'Hero CTA',at:'data-at-id="hero-cta"',ga:'data-ga-event="hero_click"\ndata-ga-product="DirectorSuite"',ca:'data-clt-event="hero_click"\ndata-clt-product="DirectorSuite"'}]},
+    'page-win-ds-specs':{title:'Director Suite Specs',url:'',updatedAt:'2026-03-15',screenshot:null,markers:[]},
+    'page-mac-pdr':{title:'PowerDirector for Mac',url:'',updatedAt:'2026-05-01',screenshot:null,markers:[{n:1,x:50,y:20,name:'Mac Download button',at:'data-at-id="mac-dl"',ga:'data-ga-event="mac_download"',ca:'data-clt-event="mac_download"'}]},
+    'page-mac-phd':{title:'PhotoDirector for Mac',url:'',updatedAt:'2026-02-28',screenshot:null,markers:[]},
+    'page-app-pdr':{title:'PowerDirector Mobile App',url:'',updatedAt:'2026-04-10',screenshot:null,markers:[]},
+    'page-dl':{title:'Downloads',url:'',updatedAt:'2026-01-20',screenshot:null,markers:[]},
+    'page-support':{title:'Support & Learning',url:'',updatedAt:'2026-03-05',screenshot:null,markers:[]}},
+  glossary:[
+    {id:'g1',type:'Auto',event:'page_view',definition:'each time the page loads or the browser history state is changed by the active site',parameter:'page_location (collected by GA4)',value:'(page URL)',note:'Use this event to replace "impression"',resource:''},
+    {id:'g2',type:'Auto',event:'file_download',definition:'when a user clicks a link leading to a file (with a common file extension) of the following types: document, text, executable, presentation, compressed file, video, audio',parameter:'file_extension, file_name, link_classes, link_domain, link_id, link_text, link_url (collected by GA4)',value:'(file name)',note:'*Need to check if all downloader file name is different (or file URL)',resource:''},
+    {id:'g3',type:'Custom',event:'page_view_cust',definition:'each time the page or popup loads or shows',parameter:'inbound_popup',value:'Purchase_Popup\nCombo_Popup\n!Purchase_Popup_New',note:'this event seems to be more for the popup, should just change the name',resource:''},
+    {id:'g4',type:'Custom',event:'page_view_cust',definition:'',parameter:'product',value:'DirectorSuite\nPowerDirector\nPowerDirectorMac\nPowerDirectorBusiness\nPromeo\nPromeoApp\nPhotoDirector\nPhotoDirectorMac\nPhotoDirectorApp\nAudioDirector\nColorDirector\nYouCam\nPowerPlayer\nPerfectCam\nPowerDirector_Ultimate',note:'*PDR Ultimate is for Combo_Popup',resource:''},
+    {id:'g5',type:'Custom',event:'page_view_cust',definition:'',parameter:'click_point',value:'Top_Banner\nBottom_Banner\nSticky_Header\n!In_Page\nSticky_Footer\nFloating\n!Direct',note:'"Direct" parameter value is for those who landed on the popup directly',resource:''},
+    {id:'g6',type:'Custom',event:'inbound_click_buy_button',definition:'Inbound click (click on buttons within the domain) on buy buttons and open popup (for 365) or direct to shopping cart (for perpetual)',parameter:'click_point',value:'Top_Banner\nBottom_Banner\nSticky_Header\n!In_Page_(section name)\nSticky_Footer\nFloating',note:'*in_body change to in_page since there is also CTA button in product page. Buttons on Store page will also be categorized in this parameter value',resource:''},
+    {id:'g7',type:'Custom',event:'inbound_click_buy_button',definition:'',parameter:'page_location (collected by GA4)',value:'(page URL)',note:'',resource:''}
+  ]};
+
+let state={data:null,activeView:'page',activeNodeId:'win-pdr',viewMode:'tooltip',isPM:false,selectedMarker:null,pinnedTooltip:false,expandedNodes:new Set(['home','win','win-ds','mac','app']),editMode:false,placingMarker:false,draggingMarker:null,glossarySearch:'',ghToken:'',ghDataSha:'',cloudStatus:'idle',dirty:false,initialLoaded:false};
+
+function loadData(){
+  // 先讀 token
+  try{state.ghToken=localStorage.getItem(TOKEN_KEY)||''}catch(e){}
+  // 試本地備份（避免空白等待）
+  try{const v=localStorage.getItem(STORAGE_KEY);if(v){state.data=JSON.parse(v);if(!state.data.glossary)state.data.glossary=JSON.parse(JSON.stringify(seedData.glossary))}}catch(e){}
+  if(!state.data)state.data=JSON.parse(JSON.stringify(seedData));
+}
+function saveData(){try{localStorage.setItem(STORAGE_KEY,JSON.stringify(state.data))}catch(e){console.error(e)}if(state.initialLoaded&&state.ghToken)markDirty()}
+
+function findNode(nodes,id){for(const n of nodes){if(n.id===id)return n;if(n.children){const f=findNode(n.children,id);if(f)return f}}return null}
+function findParent(nodes,id,parent=null){for(const n of nodes){if(n.id===id)return parent;if(n.children){const f=findParent(n.children,id,n);if(f!==null)return f}}return null}
+
+function renderTree(){const c=document.getElementById('tcTree');c.innerHTML='';state.data.tree.forEach(n=>c.appendChild(renderNode(n,0,null)))}
+function renderNode(node,depth,parent){
+  const wrap=document.createElement('div');
+  const row=document.createElement('div');
+  row.className='tc-tree-row'+(state.activeView==='page'&&node.id===state.activeNodeId?' active':'');
+  const hasChildren=node.children&&node.children.length;
+  const isExp=state.expandedNodes.has(node.id);
+  const chev=document.createElement('span');chev.className='tc-chevron';chev.innerHTML=hasChildren?(isExp?'▾':'▸'):'';row.appendChild(chev);
+  const label=document.createElement('span');label.className='tc-tree-label';label.textContent=node.name;row.appendChild(label);
+  if(node.pageId){const p=state.data.pages[node.pageId];if(p&&p.markers.length>0){const c=document.createElement('span');c.className='tc-tree-count';c.textContent=p.markers.length;row.appendChild(c)}}
+  if(state.isPM){
+    const menuBtn=document.createElement('button');
+    menuBtn.className='tc-tree-menu-btn';menuBtn.innerHTML='⋯';menuBtn.title='節點操作';
+    menuBtn.onclick=(e)=>{e.stopPropagation();openNodeMenu(node,parent,menuBtn)};
+    row.appendChild(menuBtn);
+  }
+  row.onclick=(e)=>{e.stopPropagation();if(hasChildren){if(state.expandedNodes.has(node.id))state.expandedNodes.delete(node.id);else state.expandedNodes.add(node.id)}if(node.pageId||hasChildren){state.activeView='page';state.activeNodeId=node.id;state.selectedMarker=null;state.pinnedTooltip=false;hideTooltip();const sp=document.getElementById('tcSidePanel');if(sp)sp.remove()}render()};
+  wrap.appendChild(row);
+  if(hasChildren&&isExp){const ch=document.createElement('div');ch.className='tc-tree-children';node.children.forEach(c=>ch.appendChild(renderNode(c,depth+1,node)));wrap.appendChild(ch)}
+  return wrap;
+}
+
+function updateTreeActions(){
+  const c=document.getElementById('tcTreeActions');
+  if(!state.isPM){c.style.display='none';return}
+  c.style.display='block';
+  c.innerHTML='<button class="tc-btn tc-btn-primary" id="tcAddRootNode" style="width:100%;justify-content:center"><i class="ti ti-plus"></i>新增根節點</button>';
+  document.getElementById('tcAddRootNode').onclick=()=>openNodeForm(null,null,'addChild');
+}
+
+function genId(prefix){return prefix+'-'+Date.now().toString(36)+Math.random().toString(36).slice(2,5)}
+function genPageId(){return 'page-'+Date.now().toString(36)+Math.random().toString(36).slice(2,5)}
+
+function getSiblings(node,parent){return parent?parent.children:state.data.tree}
+
+function openNodeMenu(node,parent,anchorEl){
+  closeNodeMenu();
+  const menu=document.createElement('div');menu.className='tc-node-menu';menu.id='tcNodeMenu';
+  const isLeaf=!node.children||node.children.length===0;
+  const siblings=getSiblings(node,parent);
+  const idx=siblings.indexOf(node);
+
+  menu.innerHTML=`
+    <div class="tc-node-menu-item" data-act="addChild"><i class="ti ti-plus"></i>在此節點下新增</div>
+    <div class="tc-node-menu-item" data-act="addSibling"><i class="ti ti-corner-down-right"></i>新增同層節點</div>
+    <div class="tc-node-menu-item" data-act="rename"><i class="ti ti-edit"></i>重新命名</div>
+    <div class="tc-node-menu-item" data-act="togglePage"><i class="ti ti-file"></i>${node.pageId?'轉為分類節點':'轉為頁面節點'}</div>
+    <div class="tc-node-menu-divider"></div>
+    <div class="tc-node-menu-item" data-act="moveUp" ${idx===0?'style="opacity:0.4;pointer-events:none"':''}><i class="ti ti-arrow-up"></i>上移</div>
+    <div class="tc-node-menu-item" data-act="moveDown" ${idx===siblings.length-1?'style="opacity:0.4;pointer-events:none"':''}><i class="ti ti-arrow-down"></i>下移</div>
+    <div class="tc-node-menu-divider"></div>
+    <div class="tc-node-menu-item danger" data-act="delete"><i class="ti ti-trash"></i>刪除${!isLeaf?'（含子項）':''}</div>
+  `;
+  document.body.appendChild(menu);
+  const rect=anchorEl.getBoundingClientRect();
+  menu.style.left=Math.min(rect.left,window.innerWidth-180)+'px';
+  menu.style.top=(rect.bottom+4)+'px';
+
+  menu.querySelectorAll('.tc-node-menu-item').forEach(el=>{
+    el.onclick=(e)=>{
+      e.stopPropagation();
+      const act=el.dataset.act;
+      closeNodeMenu();
+      handleNodeAction(act,node,parent);
+    };
+  });
+
+  setTimeout(()=>{
+    document.addEventListener('click',closeNodeMenu,{once:true});
+  },10);
+}
+function closeNodeMenu(){const m=document.getElementById('tcNodeMenu');if(m)m.remove()}
+
+function handleNodeAction(act,node,parent){
+  const siblings=getSiblings(node,parent);
+  const idx=siblings.indexOf(node);
+
+  if(act==='addChild'){openNodeForm(node,parent,'addChild');return}
+  if(act==='addSibling'){openNodeForm(node,parent,'addSibling');return}
+  if(act==='rename'){openNodeForm(node,parent,'rename');return}
+  if(act==='togglePage'){
+    if(node.pageId){
+      if(node.children&&node.children.length){alert('已有子節點，無法轉為頁面節點。請先刪除子節點。');return}
+      if(!confirm(`轉為分類節點後，「${node.name}」的截圖與追蹤點資料將被刪除。確定？`))return;
+      delete state.data.pages[node.pageId];delete node.pageId;
+    }else{
+      if(node.children&&node.children.length){alert('已有子節點，無法轉為頁面節點。');return}
+      const pid=genPageId();
+      node.pageId=pid;
+      state.data.pages[pid]={title:node.name,url:'',updatedAt:new Date().toISOString().slice(0,10),screenshot:null,markers:[]};
+    }
+    saveData();render();return;
+  }
+  if(act==='moveUp'&&idx>0){[siblings[idx-1],siblings[idx]]=[siblings[idx],siblings[idx-1]];saveData();render();return}
+  if(act==='moveDown'&&idx<siblings.length-1){[siblings[idx],siblings[idx+1]]=[siblings[idx+1],siblings[idx]];saveData();render();return}
+  if(act==='delete'){
+    const childCount=countDescendants(node);
+    const msg=childCount>0?`「${node.name}」包含 ${childCount} 個子項，全部會一併刪除。確定？`:`確定刪除「${node.name}」？`;
+    if(!confirm(msg))return;
+    deleteAllPages(node);
+    siblings.splice(idx,1);
+    if(state.activeNodeId===node.id||isDescendant(node,state.activeNodeId)){
+      state.activeNodeId=siblings[0]?siblings[0].id:(state.data.tree[0]?state.data.tree[0].id:null);
+    }
+    saveData();render();return;
+  }
+}
+function countDescendants(node){if(!node.children)return 0;let n=node.children.length;node.children.forEach(c=>n+=countDescendants(c));return n}
+function isDescendant(node,targetId){if(!node.children)return false;for(const c of node.children){if(c.id===targetId)return true;if(isDescendant(c,targetId))return true}return false}
+function deleteAllPages(node){if(node.pageId)delete state.data.pages[node.pageId];if(node.children)node.children.forEach(deleteAllPages)}
+
+function openNodeForm(refNode,parent,mode){
+  const isRename=mode==='rename';
+  const titleMap={addChild:refNode?`在「${refNode.name}」下新增節點`:'新增根節點',addSibling:`新增「${refNode.name}」的同層節點`,rename:`重新命名「${refNode.name}」`};
+  const defName=isRename?refNode.name:'';
+  const defAsPage=isRename?!!refNode.pageId:true;
+
+  showModal(`<h3>${titleMap[mode]}</h3>
+    <div class="tc-form-row"><label>名稱</label><input id="nName" value="${escAttr(defName)}" placeholder="例如：Use Cases"/></div>
+    ${!isRename?`<div class="tc-form-row">
+      <label style="display:flex;align-items:center;gap:6px;cursor:pointer">
+        <input type="checkbox" id="nAsPage" ${defAsPage?'checked':''} style="width:auto"/>
+        <span>建立為頁面節點（可上傳截圖、新增追蹤點）</span>
+      </label>
+      <div style="font-size:11px;color:var(--color-text-tertiary);margin-top:4px;margin-left:22px">未勾選則為分類節點，僅用於組織結構</div>
+    </div>`:''}
+    <div class="tc-form-actions">
+      <button class="tc-btn" id="nCancel">取消</button>
+      <button class="tc-btn tc-btn-primary" id="nSave">儲存</button>
+    </div>`);
+  document.getElementById('nCancel').onclick=closeModal;
+  setTimeout(()=>document.getElementById('nName').focus(),50);
+  document.getElementById('nName').addEventListener('keydown',(e)=>{if(e.key==='Enter')document.getElementById('nSave').click()});
+  document.getElementById('nSave').onclick=()=>{
+    const name=document.getElementById('nName').value.trim();
+    if(!name){alert('請輸入名稱');return}
+    if(isRename){
+      refNode.name=name;
+      if(refNode.pageId&&state.data.pages[refNode.pageId]){state.data.pages[refNode.pageId].title=name}
+    }else{
+      const asPage=document.getElementById('nAsPage').checked;
+      const newNode={id:genId('n'),name:name};
+      if(asPage){
+        const pid=genPageId();
+        newNode.pageId=pid;
+        state.data.pages[pid]={title:name,url:'',updatedAt:new Date().toISOString().slice(0,10),screenshot:null,markers:[]};
+      }
+      if(mode==='addChild'&&refNode){
+        if(!refNode.children)refNode.children=[];
+        if(refNode.pageId){
+          if(!confirm(`「${refNode.name}」目前是頁面節點，新增子節點後會轉為分類節點，原有的截圖與追蹤點將被刪除。確定？`))return;
+          delete state.data.pages[refNode.pageId];delete refNode.pageId;
+        }
+        refNode.children.push(newNode);
+        state.expandedNodes.add(refNode.id);
+      }else if(mode==='addSibling'&&refNode){
+        const sibs=getSiblings(refNode,parent);
+        const i=sibs.indexOf(refNode);
+        sibs.splice(i+1,0,newNode);
+      }else{
+        // 新增根節點
+        state.data.tree.push(newNode);
+      }
+      if(asPage)state.activeNodeId=newNode.id;
+    }
+    saveData();closeModal();render();
+  };
+}
+
+function renderGlossary(main){
+  const q=state.glossarySearch.toLowerCase().trim();
+  const rows=state.data.glossary||[];
+  const filtered=q?rows.filter(r=>(r.type+r.event+r.definition+r.parameter+r.value+r.note+r.resource).toLowerCase().includes(q)):rows;
+
+  main.innerHTML=`
+    <div class="tc-page-header">
+      <div>
+        <h2 class="tc-page-title"><i class="ti ti-book-2" style="font-size:18px;vertical-align:-2px"></i> 追蹤碼規範總表</h2>
+        <div class="tc-page-meta">所有可用的 Event / Parameter / Value 定義 · 共 ${rows.length} 條規範${q?` · 篩選出 ${filtered.length} 條`:''}</div>
+      </div>
+      ${state.isPM?`<button class="tc-btn tc-btn-primary" id="gAddRow"><i class="ti ti-plus"></i>新增規範</button>`:''}
+    </div>
+    <div class="tc-glossary-controls">
+      <input type="text" class="tc-glossary-search" id="gSearch" placeholder="🔍 搜尋 Event、Parameter、Value..." value="${escAttr(state.glossarySearch)}"/>
+      ${state.isPM?'<span style="font-size:11px;color:var(--color-text-success);display:inline-flex;align-items:center;gap:4px"><i class="ti ti-edit"></i>編輯模式：點任意儲存格即可修改</span>':''}
+    </div>
+    ${filtered.length===0?'<div class="tc-glossary-empty-search">無符合的規範</div>':`
+    <div style="overflow-x:auto;max-height:calc(100vh - 260px);overflow-y:auto;border-radius:var(--border-radius-md)">
+    <table class="tc-glossary-table">
+      <thead><tr>
+        <th style="width:80px">Type</th>
+        <th style="width:160px">Event</th>
+        <th style="width:220px">Definition</th>
+        <th style="width:160px">Parameter</th>
+        <th style="width:200px">Value</th>
+        <th style="width:220px">Note</th>
+        <th style="width:100px">Resource</th>
+        ${state.isPM?'<th style="width:40px"></th>':''}
+      </tr></thead>
+      <tbody>
+      ${filtered.map(row=>renderGlossaryRow(row)).join('')}
+      </tbody>
+    </table>
+    </div>`}
+  `;
+
+  const sb=document.getElementById('gSearch');
+  if(sb){
+    sb.oninput=(e)=>{state.glossarySearch=e.target.value;
+      // 局部更新表格而非整個 render，避免輸入時失焦
+      const filt=state.glossarySearch.toLowerCase().trim();
+      const f=filt?rows.filter(r=>(r.type+r.event+r.definition+r.parameter+r.value+r.note+r.resource).toLowerCase().includes(filt)):rows;
+      const tbody=main.querySelector('.tc-glossary-table tbody');
+      if(tbody)tbody.innerHTML=f.map(row=>renderGlossaryRow(row)).join('');
+      const meta=main.querySelector('.tc-page-meta');
+      if(meta)meta.textContent=`所有可用的 Event / Parameter / Value 定義 · 共 ${rows.length} 條規範${filt?` · 篩選出 ${f.length} 條`:''}`;
+    };
+  }
+  const ab=document.getElementById('gAddRow');
+  if(ab)ab.onclick=()=>addGlossaryRow();
+}
+
+function renderGlossaryRow(row){
+  const editable=state.isPM;
+  return `<tr data-row-id="${row.id}">
+    <td class="${editable?'editable':''}" data-field="type">${row.type?`<span class="tc-glossary-tag ${row.type.toLowerCase()}">${esc(row.type)}</span>`:'<span style="color:var(--color-text-tertiary)">—</span>'}</td>
+    <td class="${editable?'editable':''}" data-field="event" style="font-family:var(--font-mono);font-size:11px">${esc(row.event||'')}</td>
+    <td class="${editable?'editable':''}" data-field="definition" style="font-size:11px;color:var(--color-text-secondary)">${esc(row.definition||'')}</td>
+    <td class="${editable?'editable':''}" data-field="parameter" style="font-family:var(--font-mono);font-size:11px">${esc(row.parameter||'')}</td>
+    <td class="${editable?'editable':''}" data-field="value">${renderValueCell(row.value)}</td>
+    <td class="${editable?'editable':''}" data-field="note" style="font-size:11px">${renderNoteCell(row.note)}</td>
+    <td class="${editable?'editable':''}" data-field="resource" style="font-size:11px">${renderResourceCell(row.resource)}</td>
+    ${editable?`<td class="tc-glossary-row-actions"><button class="tc-glossary-rowdel" data-del-row="${row.id}" title="刪除此列"><i class="ti ti-trash"></i></button></td>`:''}
+  </tr>`;
+}
+
+function renderValueCell(v){
+  if(!v)return '<span style="color:var(--color-text-tertiary)">—</span>';
+  return v.split('\n').map(line=>{
+    const t=line.trim();if(!t)return '';
+    const isHighlight=t.startsWith('!');
+    const text=isHighlight?t.slice(1):t;
+    return `<span class="tc-glossary-value-pill${isHighlight?' highlight':''}">${esc(text)}</span>`;
+  }).join('');
+}
+function renderNoteCell(n){
+  if(!n)return '<span style="color:var(--color-text-tertiary)">—</span>';
+  return n.split('\n').map(line=>{
+    if(line.trim().startsWith('*'))return `<div style="color:var(--color-text-danger)">${esc(line)}</div>`;
+    return `<div>${esc(line)}</div>`;
+  }).join('');
+}
+function renderResourceCell(r){
+  if(!r)return '<span style="color:var(--color-text-tertiary)">—</span>';
+  if(/^https?:\/\//.test(r.trim()))return `<a href="${escAttr(r.trim())}" target="_blank" rel="noopener" class="tc-glossary-link">${esc(r.trim().length>30?r.trim().slice(0,28)+'…':r.trim())}</a>`;
+  return esc(r);
+}
+
+function addGlossaryRow(){
+  const newRow={id:'g'+Date.now().toString(36)+Math.random().toString(36).slice(2,5),type:'Custom',event:'',definition:'',parameter:'',value:'',note:'',resource:''};
+  if(!state.data.glossary)state.data.glossary=[];
+  state.data.glossary.unshift(newRow);
+  saveData();render();
+  // 自動進入第一格編輯
+  setTimeout(()=>{
+    const cell=document.querySelector(`tr[data-row-id="${newRow.id}"] td[data-field="event"]`);
+    if(cell)startEditCell(cell,newRow,'event');
+  },80);
+}
+
+function startEditCell(cell,row,field){
+  if(cell.classList.contains('editing'))return;
+  cell.classList.add('editing');
+  const val=row[field]||'';
+  const isMultiline=['definition','value','note','parameter'].includes(field);
+  let inputEl;
+  if(field==='type'){
+    inputEl=document.createElement('select');
+    inputEl.innerHTML='<option value="">—</option><option value="Auto">Auto</option><option value="Custom">Custom</option>';
+    inputEl.value=val;
+  }else if(isMultiline){
+    inputEl=document.createElement('textarea');
+    inputEl.value=val;
+    inputEl.style.minHeight=Math.max(60,val.split('\n').length*22)+'px';
+  }else{
+    inputEl=document.createElement('input');
+    inputEl.type='text';
+    inputEl.value=val;
+  }
+  cell.innerHTML='';
+  cell.appendChild(inputEl);
+  inputEl.focus();
+  if(inputEl.select)inputEl.select();
+
+  let saved=false;
+  const finish=(commit)=>{
+    if(saved)return;saved=true;
+    if(commit){
+      const newVal=inputEl.value;
+      if(newVal!==row[field]){row[field]=newVal;saveData()}
+    }
+    cell.classList.remove('editing');
+    // 重新渲染這一列
+    const tr=cell.closest('tr');
+    if(tr)tr.outerHTML=renderGlossaryRow(row);
+  };
+  inputEl.addEventListener('blur',()=>finish(true));
+  inputEl.addEventListener('keydown',(e)=>{
+    if(e.key==='Escape'){e.preventDefault();finish(false)}
+    else if(e.key==='Enter'&&!isMultiline){e.preventDefault();finish(true)}
+    else if(e.key==='Enter'&&(e.metaKey||e.ctrlKey)){e.preventDefault();finish(true)}
+  });
+}
+
+function renderMain(){
+  const main=document.getElementById('tcMain');
+  if(state.activeView==='glossary'){renderGlossary(main);return}
+  const node=findNode(state.data.tree,state.activeNodeId);
+  if(!node){main.innerHTML='<div class="tc-empty-state">請從左側選擇頁面</div>';return}
+  const page=node.pageId?state.data.pages[node.pageId]:null;
+  if(!page){
+    const cc=node.children?node.children.length:0;
+    main.innerHTML=`<div class="tc-page-header"><div><h2 class="tc-page-title">${esc(node.name)}</h2><div class="tc-page-meta">分類節點 · 包含 ${cc} 個子項</div></div></div><div class="tc-empty-state">這是分類節點，請從左側展開選擇實際頁面。</div>`;return;
+  }
+  main.innerHTML=`
+    <div class="tc-page-header">
+      <div><h2 class="tc-page-title">${esc(page.title)}</h2><div class="tc-page-meta">${page.url?esc(page.url)+' · ':''}最後更新 ${page.updatedAt} · ${page.markers.length} 個追蹤點</div></div>
+    </div>
+    <div class="tc-mode-sticky">
+      <div class="tc-mode-tabs">
+        <button class="tc-mode-tab${state.viewMode==='tooltip'?' active':''}" data-mode="tooltip">Tooltip</button>
+        <button class="tc-mode-tab${state.viewMode==='sidebar'?' active':''}" data-mode="sidebar">側邊欄</button>
+        <button class="tc-mode-tab${state.viewMode==='table'?' active':''}" data-mode="table">表格</button>
+      </div>
+      ${state.isPM?`<button class="tc-btn ${state.editMode?'tc-btn-primary':''}" id="tcToggleEdit"><i class="ti ti-edit"></i>${state.editMode?'結束編輯':'編輯此頁'}</button>`:''}
+    </div>
+    ${state.editMode?renderStickyBar(page):''}
+    <div class="tc-screenshot-wrap" id="tcScreenshotWrap">
+      ${page.screenshot?`<img src="${page.screenshot}" class="tc-screenshot" alt="${esc(page.title)}" draggable="false"/>`:`<div class="tc-placeholder"><i class="ti ti-photo" style="font-size:36px"></i><div>尚未上傳頁面截圖</div>${state.isPM&&state.editMode?'<div style="margin-top:8px"><input type="file" id="tcUploadImg" accept="image/*" style="font-size:12px"/></div>':'<div style="font-size:11px">PM 登入並進入編輯模式後可上傳</div>'}</div>`}
+      ${page.screenshot?renderMarkers(page):''}
+      ${state.placingMarker?'<div class="tc-placing-hint"><i class="ti ti-pin"></i> 點擊截圖任意位置以放置標記</div>':''}
+    </div>
+    ${state.viewMode==='table'?renderTable(page):''}`;
+
+  main.querySelectorAll('.tc-mode-tab').forEach(b=>b.onclick=()=>{state.viewMode=b.dataset.mode;state.pinnedTooltip=false;hideTooltip();const sp=document.getElementById('tcSidePanel');if(sp)sp.remove();render()});
+  const te=document.getElementById('tcToggleEdit');if(te)te.onclick=()=>{state.editMode=!state.editMode;state.placingMarker=false;render()};
+  const up=document.getElementById('tcUploadImg');if(up)up.onchange=handleImageUpload;
+
+  if(page.screenshot)attachMarkerHandlers(page);
+
+  if(state.viewMode==='sidebar'&&state.selectedMarker!==null&&page.markers[state.selectedMarker]){renderSidePanel(page.markers[state.selectedMarker],state.selectedMarker)}
+  if(state.viewMode==='tooltip'&&state.pinnedTooltip&&state.selectedMarker!==null&&page.markers[state.selectedMarker]){
+    const wrap=document.getElementById('tcScreenshotWrap');
+    const target=wrap.querySelector(`.tc-marker[data-idx="${state.selectedMarker}"]`);
+    if(target)showTooltip(page.markers[state.selectedMarker],state.selectedMarker,wrap,target,true);
+  }
+}
+
+function attachMarkerHandlers(page){
+  const wrap=document.getElementById('tcScreenshotWrap');
+
+  wrap.querySelectorAll('.tc-marker').forEach(m=>{
+    const idx=parseInt(m.dataset.idx);
+
+    // 編輯模式下，啟用拖拉
+    if(state.editMode){
+      m.onmousedown=(e)=>startDrag(e,idx,m,wrap);
+      m.ontouchstart=(e)=>startDrag(e.touches[0],idx,m,wrap,true);
+      m.onclick=(e)=>{
+        if(state.draggingMarker!==null)return; // 拖拉時不觸發點擊
+        e.stopPropagation();
+        state.selectedMarker=idx;
+        if(state.viewMode==='tooltip'){state.pinnedTooltip=true;showTooltip(page.markers[idx],idx,wrap,e.target,true)}
+        else if(state.viewMode==='sidebar')renderSidePanel(page.markers[idx],idx);
+        else if(state.viewMode==='table')render();
+      };
+    }else{
+      m.onmouseenter=(e)=>{if(state.viewMode==='tooltip'&&!state.pinnedTooltip){showTooltip(page.markers[idx],idx,wrap,e.target,false)}};
+      m.onmouseleave=()=>{if(state.viewMode==='tooltip'&&!state.pinnedTooltip)hideTooltip()};
+      m.onclick=(e)=>{
+        e.stopPropagation();
+        state.selectedMarker=idx;
+        if(state.viewMode==='tooltip'){state.pinnedTooltip=true;showTooltip(page.markers[idx],idx,wrap,e.target,true)}
+        else if(state.viewMode==='sidebar')renderSidePanel(page.markers[idx],idx);
+        else if(state.viewMode==='table')render();
+      };
+    }
+  });
+
+  if(state.placingMarker){
+    wrap.style.cursor='crosshair';
+    wrap.onclick=(e)=>{
+      if(e.target.classList.contains('tc-marker'))return;
+      const rect=wrap.getBoundingClientRect();
+      const x=((e.clientX-rect.left)/rect.width)*100;
+      const y=((e.clientY-rect.top)/rect.height)*100;
+      state.placingMarker=false;openMarkerForm(null,x,y);
+    };
+  }else{wrap.style.cursor='default';wrap.onclick=null}
+}
+
+function startDrag(e,idx,markerEl,wrap,isTouch){
+  e.preventDefault();
+  const node=findNode(state.data.tree,state.activeNodeId);
+  const page=state.data.pages[node.pageId];
+  let hasMoved=false;
+  const startX=e.clientX,startY=e.clientY;
+
+  hideTooltip();
+  state.draggingMarker=idx;
+  markerEl.classList.add('dragging');
+
+  const onMove=(ev)=>{
+    const pt=isTouch?ev.touches[0]:ev;
+    const dx=Math.abs(pt.clientX-startX),dy=Math.abs(pt.clientY-startY);
+    if(dx>3||dy>3)hasMoved=true;
+    const rect=wrap.getBoundingClientRect();
+    let x=((pt.clientX-rect.left)/rect.width)*100;
+    let y=((pt.clientY-rect.top)/rect.height)*100;
+    x=Math.max(0,Math.min(100,x));
+    y=Math.max(0,Math.min(100,y));
+    markerEl.style.left=x+'%';
+    markerEl.style.top=y+'%';
+    page.markers[idx].x=x;
+    page.markers[idx].y=y;
+    if(ev.preventDefault)ev.preventDefault();
+  };
+  const onUp=()=>{
+    document.removeEventListener('mousemove',onMove);
+    document.removeEventListener('mouseup',onUp);
+    document.removeEventListener('touchmove',onMove);
+    document.removeEventListener('touchend',onUp);
+    markerEl.classList.remove('dragging');
+    if(hasMoved){
+      page.markers[idx].x=Math.round(page.markers[idx].x*10)/10;
+      page.markers[idx].y=Math.round(page.markers[idx].y*10)/10;
+      page.updatedAt=new Date().toISOString().slice(0,10);
+      saveData();
+    }
+    // 用 setTimeout 確保 onclick 知道剛剛在拖拉
+    setTimeout(()=>{state.draggingMarker=null;if(hasMoved)render()},10);
+  };
+  document.addEventListener('mousemove',onMove);
+  document.addEventListener('mouseup',onUp);
+  if(isTouch){
+    document.addEventListener('touchmove',onMove,{passive:false});
+    document.addEventListener('touchend',onUp);
+  }
+}
+
+function renderMarkers(page){
+  return page.markers.map((m,i)=>{
+    const cls=state.editMode?'tc-marker edit-mode':'tc-marker';
+    const sel=state.selectedMarker===i?' selected':'';
+    return `<div class="${cls}${sel}" style="left:${m.x}%;top:${m.y}%" data-idx="${i}">${m.n}</div>`;
+  }).join('');
+}
+
+function renderTable(page){
+  if(page.markers.length===0)return '<div class="tc-empty-state">尚無追蹤點，PM 可在編輯模式中新增。</div>';
+  return `<table class="tc-detail-table"><thead><tr>
+    <th class="tc-num-cell">#</th><th class="tc-name-cell">Click Point</th>
+    <th>Auto Test</th><th>GA</th><th>CA</th>${state.isPM&&state.editMode?'<th style="width:50px"></th>':''}
+  </tr></thead><tbody>
+  ${page.markers.map((m,i)=>`<tr class="${state.selectedMarker===i?'selected':''}" data-row="${i}">
+    <td class="tc-num-cell">${m.n}</td><td>${esc(m.name)}</td>
+    <td>${formatCode(m.at)}</td><td>${formatCode(m.ga)}</td><td>${formatCode(m.ca)}</td>
+    ${state.isPM&&state.editMode?`<td><button class="tc-btn" data-edit-row="${i}" style="padding:2px 6px"><i class="ti ti-edit"></i></button></td>`:''}
+  </tr>`).join('')}</tbody></table>`;
+}
+
+function formatCode(s){
+  if(!s)return '<span style="color:var(--color-text-tertiary)">—</span>';
+  return s.split('\n').map(line=>{
+    const m=line.match(/^([a-z-]+)="(.*)"$/i);
+    if(m)return `<div class="tc-code-line"><span><span class="tc-code-key">${esc(m[1])}</span>="${esc(m[2])}"</span><button class="tc-copy-btn" data-copy="${esc(line)}" title="複製">⧉</button></div>`;
+    return `<div class="tc-code-line"><span>${esc(line)}</span><button class="tc-copy-btn" data-copy="${esc(line)}">⧉</button></div>`;
+  }).join('');
+}
+
+function showTooltip(marker,idx,wrap,target,pinned){
+  hideTooltip();
+  const tip=document.createElement('div');
+  tip.className='tc-tooltip';tip.id='tcTooltip';
+  tip.style.pointerEvents=pinned?'auto':'none';
+  tip.innerHTML=`
+    <div class="tc-tooltip-title">
+      <span>#${marker.n} ${esc(marker.name||'未命名')}</span>
+      ${pinned?'<button class="tc-copy-btn" id="tipClose" style="opacity:1;font-size:14px" title="關閉">×</button>':''}
+    </div>
+    ${marker.at?`<div class="tc-tooltip-section"><div class="tc-tooltip-section-label">Auto Test</div><div class="tc-tooltip-code">${esc(marker.at)}</div></div>`:''}
+    ${marker.ga?`<div class="tc-tooltip-section"><div class="tc-tooltip-section-label">GA</div><div class="tc-tooltip-code">${esc(marker.ga)}</div></div>`:''}
+    ${marker.ca?`<div class="tc-tooltip-section"><div class="tc-tooltip-section-label">CA</div><div class="tc-tooltip-code">${esc(marker.ca)}</div></div>`:''}
+    ${!marker.at&&!marker.ga&&!marker.ca?'<div style="color:var(--color-text-tertiary);font-size:11px;margin-top:4px">尚未填入追蹤碼</div>':''}
+    ${pinned?`<div class="tc-tooltip-actions">
+      ${state.isPM&&state.editMode?`<button class="tc-btn tc-btn-primary" id="tipEdit" style="padding:4px 8px;font-size:11px"><i class="ti ti-edit"></i>編輯</button>`:''}
+      <button class="tc-btn" id="tipTable" style="padding:4px 8px;font-size:11px"><i class="ti ti-table"></i>表格檢視</button>
+      ${state.isPM&&state.editMode?`<button class="tc-btn tc-btn-danger" id="tipDel" style="padding:4px 8px;font-size:11px"><i class="ti ti-trash"></i></button>`:''}
+    </div>`:`<div style="font-size:10px;color:var(--color-text-tertiary);margin-top:6px">點擊標記可釘選並編輯</div>`}
+  `;
+  const wrapRect=wrap.getBoundingClientRect();
+  const tRect=target.getBoundingClientRect();
+  let left=tRect.left-wrapRect.left+30;
+  let top=tRect.top-wrapRect.top;
+  if(left+320>wrapRect.width)left=tRect.left-wrapRect.left-328;
+  if(left<0)left=8;
+  // 避開 sticky mode bar 遮擋：若標記目前被 sticky bar 蓋住，把 tooltip 拉到視窗可見區
+  const stickyBar=document.querySelector('.tc-mode-sticky');
+  const stickyBottom=stickyBar?stickyBar.getBoundingClientRect().bottom:0;
+  const minTopInWrap=Math.max(8,stickyBottom-wrapRect.top+8);
+  if(top<minTopInWrap)top=minTopInWrap;
+  tip.style.left=left+'px';tip.style.top=top+'px';
+  wrap.appendChild(tip);
+
+  if(pinned){
+    const cb=tip.querySelector('#tipClose');if(cb)cb.onclick=()=>{hideTooltip();state.pinnedTooltip=false;state.selectedMarker=null;render()};
+    const eb=tip.querySelector('#tipEdit');if(eb)eb.onclick=()=>{hideTooltip();state.pinnedTooltip=false;openMarkerForm(idx)};
+    const tb=tip.querySelector('#tipTable');if(tb)tb.onclick=()=>{hideTooltip();state.pinnedTooltip=false;state.viewMode='table';render()};
+    const db=tip.querySelector('#tipDel');if(db)db.onclick=()=>{
+      if(!confirm(`確定刪除追蹤點 #${marker.n} ${marker.name}？`))return;
+      const node=findNode(state.data.tree,state.activeNodeId);
+      const page=state.data.pages[node.pageId];
+      page.markers.splice(idx,1);page.markers.forEach((mk,i)=>mk.n=i+1);
+      page.updatedAt=new Date().toISOString().slice(0,10);
+      saveData();state.selectedMarker=null;state.pinnedTooltip=false;hideTooltip();render();
+    };
+  }
+}
+function hideTooltip(){const t=document.getElementById('tcTooltip');if(t)t.remove()}
+
+function renderSidePanel(marker,idx){
+  let panel=document.getElementById('tcSidePanel');if(panel)panel.remove();
+  panel=document.createElement('div');panel.className='tc-side-panel';panel.id='tcSidePanel';
+  panel.innerHTML=`
+    <button class="tc-side-close" id="tcSideClose"><i class="ti ti-x"></i></button>
+    <div style="font-size:11px;color:var(--color-text-tertiary)">追蹤點 #${marker.n}</div>
+    <h3 style="margin:4px 0 14px;font-size:15px;font-weight:500">${esc(marker.name||'未命名')}</h3>
+    <div style="margin-bottom:12px"><div style="font-size:11px;font-weight:500;color:var(--color-text-secondary);margin-bottom:5px">AUTO TEST</div><div style="background:var(--color-background-secondary);padding:9px;border-radius:6px">${formatCode(marker.at)}</div></div>
+    <div style="margin-bottom:12px"><div style="font-size:11px;font-weight:500;color:var(--color-text-secondary);margin-bottom:5px">GA</div><div style="background:var(--color-background-secondary);padding:9px;border-radius:6px">${formatCode(marker.ga)}</div></div>
+    <div style="margin-bottom:16px"><div style="font-size:11px;font-weight:500;color:var(--color-text-secondary);margin-bottom:5px">CA</div><div style="background:var(--color-background-secondary);padding:9px;border-radius:6px">${formatCode(marker.ca)}</div></div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap">
+      ${state.isPM&&state.editMode?`<button class="tc-btn tc-btn-primary" id="sideEdit"><i class="ti ti-edit"></i>編輯</button>`:''}
+      <button class="tc-btn" id="sideTable"><i class="ti ti-table"></i>跳到表格</button>
+      ${state.isPM&&state.editMode?`<button class="tc-btn tc-btn-danger" id="sideDel"><i class="ti ti-trash"></i>刪除</button>`:''}
+    </div>`;
+  document.querySelector('.tc-layout').parentElement.insertBefore(panel,document.querySelector('.tc-status-bar'));
+  document.querySelector('.tc-layout').style.position='relative';
+  panel.style.top='0';
+  panel.style.bottom='0';
+  panel.style.height='auto';
+  panel.querySelector('#tcSideClose').onclick=()=>{panel.remove();state.selectedMarker=null;render()};
+  const se=panel.querySelector('#sideEdit');if(se)se.onclick=()=>openMarkerForm(idx);
+  const st=panel.querySelector('#sideTable');if(st)st.onclick=()=>{panel.remove();state.viewMode='table';render()};
+  const sd=panel.querySelector('#sideDel');if(sd)sd.onclick=()=>{
+    if(!confirm(`確定刪除追蹤點 #${marker.n} ${marker.name}？`))return;
+    const node=findNode(state.data.tree,state.activeNodeId);
+    const page=state.data.pages[node.pageId];
+    page.markers.splice(idx,1);page.markers.forEach((mk,i)=>mk.n=i+1);
+    page.updatedAt=new Date().toISOString().slice(0,10);
+    saveData();panel.remove();state.selectedMarker=null;render();
+  };
+}
+
+function renderStickyBar(page){
+  return `<div class="tc-edit-sticky">
+    <div class="tc-edit-sticky-label"><i class="ti ti-edit"></i> PM 編輯模式</div>
+    <button class="tc-btn tc-btn-primary" id="tcAddMarker"${state.placingMarker?' disabled style="opacity:0.5"':''}><i class="ti ti-plus"></i>${state.placingMarker?'點擊截圖以放置...':'新增追蹤點'}</button>
+    ${state.placingMarker?'<button class="tc-btn" id="tcCancelPlace">取消</button>':''}
+    <button class="tc-btn" id="tcEditPage"><i class="ti ti-file-text"></i>編輯頁面資訊</button>
+    <button class="tc-btn" id="tcChangeImg"><i class="ti ti-photo"></i>更換截圖</button>
+    <input type="file" id="tcImgInput" accept="image/*" style="display:none"/>
+  </div>`;
+}
+
+document.addEventListener('click',(e)=>{
+  // 規範總表：點儲存格進入編輯
+  if(state.activeView==='glossary'){
+    const delBtn=e.target.closest('[data-del-row]');
+    if(delBtn){
+      const rid=delBtn.dataset.delRow;
+      if(!confirm('確定刪除此規範？'))return;
+      state.data.glossary=state.data.glossary.filter(r=>r.id!==rid);
+      saveData();render();return;
+    }
+    const cell=e.target.closest('td.editable');
+    if(cell&&state.isPM&&!cell.classList.contains('editing')){
+      const tr=cell.closest('tr');
+      const rid=tr.dataset.rowId;
+      const field=cell.dataset.field;
+      const row=state.data.glossary.find(r=>r.id===rid);
+      if(row)startEditCell(cell,row,field);
+      return;
+    }
+  }
+  if(e.target.closest('#tcAddMarker')&&!state.placingMarker){state.placingMarker=true;render();return}
+  if(e.target.closest('#tcCancelPlace')){state.placingMarker=false;render();return}
+  if(e.target.closest('#tcEditPage')){openPageForm();return}
+  if(e.target.closest('#tcChangeImg')){document.getElementById('tcImgInput').click();return}
+  if(e.target.id==='tcImgInput'&&e.target.files){handleImageUpload({target:e.target});return}
+  const editBtn=e.target.closest('[data-edit-row]');
+  if(editBtn){openMarkerForm(parseInt(editBtn.dataset.editRow));return}
+  const rowBtn=e.target.closest('[data-row]');
+  if(rowBtn&&!e.target.closest('[data-edit-row]')&&!e.target.closest('[data-copy]')){
+    const idx=parseInt(rowBtn.dataset.row);
+    state.selectedMarker=idx;
+    state.viewMode='tooltip';
+    state.pinnedTooltip=true;
+    render();
+    // 等 DOM 更新後捲到截圖區並釘選 tooltip
+    setTimeout(()=>{
+      const wrap=document.getElementById('tcScreenshotWrap');
+      if(wrap){
+        wrap.scrollIntoView({behavior:'smooth',block:'start'});
+        const node=findNode(state.data.tree,state.activeNodeId);
+        const page=state.data.pages[node.pageId];
+        const target=wrap.querySelector(`.tc-marker[data-idx="${idx}"]`);
+        if(target&&page.markers[idx])showTooltip(page.markers[idx],idx,wrap,target,true);
+      }
+    },50);
+    return;
+  }
+  const copyBtn=e.target.closest('[data-copy]');
+  if(copyBtn){navigator.clipboard.writeText(copyBtn.dataset.copy).then(()=>{copyBtn.textContent='✓';setTimeout(()=>copyBtn.textContent='⧉',1000)});return}
+  if(state.pinnedTooltip&&!e.target.closest('#tcTooltip')&&!e.target.closest('.tc-marker')){
+    state.pinnedTooltip=false;state.selectedMarker=null;hideTooltip();render();
+  }
+});
+
+function handleImageUpload(e){
+  const file=e.target.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=async(ev)=>{
+    const node=findNode(state.data.tree,state.activeNodeId);
+    const dataUrl=ev.target.result;
+    // 嘗試上傳到 GitHub
+    let finalUrl=dataUrl;
+    if(state.ghToken){
+      const ext=(file.name.split('.').pop()||'png').toLowerCase().replace(/[^a-z0-9]/g,'')||'png';
+      const filename=node.pageId+'-'+Date.now()+'.'+ext;
+      setCloudStatus('saving');
+      finalUrl=await uploadImage(dataUrl,filename);
+      setCloudStatus(state.dirty?'dirty':'synced');
+    }
+    state.data.pages[node.pageId].screenshot=finalUrl;
+    state.data.pages[node.pageId].updatedAt=new Date().toISOString().slice(0,10);
+    saveData();render();
+  };reader.readAsDataURL(file);
+}
+
+function openMarkerForm(idx,x,y){
+  const node=findNode(state.data.tree,state.activeNodeId);
+  const page=state.data.pages[node.pageId];
+  const isNew=idx===null||idx===undefined;
+  const m=isNew?{n:page.markers.length+1,x:x||50,y:y||50,name:'',at:'',ga:'',ca:''}:{...page.markers[idx]};
+  showModal(`<h3>${isNew?'新增':'編輯'}追蹤點 #${m.n}</h3>
+    <div class="tc-form-row"><label>名稱</label><input id="fName" value="${escAttr(m.name)}" placeholder="例如：Top banner Buy button"/></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+      <div class="tc-form-row"><label>X (%)</label><input id="fX" type="number" step="0.1" value="${m.x.toFixed(1)}"/></div>
+      <div class="tc-form-row"><label>Y (%)</label><input id="fY" type="number" step="0.1" value="${m.y.toFixed(1)}"/></div>
+    </div>
+    <div class="tc-form-row"><label>Auto Test (AT)</label><textarea id="fAt" placeholder='data-at-id="..."'>${escAttr(m.at)}</textarea></div>
+    <div class="tc-form-row"><label>GA</label><textarea id="fGa" placeholder='data-ga-event="..."'>${escAttr(m.ga)}</textarea></div>
+    <div class="tc-form-row"><label>CA</label><textarea id="fCa" placeholder='data-clt-event="..."'>${escAttr(m.ca)}</textarea></div>
+    <div class="tc-form-actions">
+      ${!isNew?'<button class="tc-btn tc-btn-danger" id="fDel">刪除</button>':''}
+      <button class="tc-btn" id="fCancel">取消</button>
+      <button class="tc-btn tc-btn-primary" id="fSave">儲存</button>
+    </div>`);
+  document.getElementById('fCancel').onclick=closeModal;
+  document.getElementById('fSave').onclick=()=>{
+    const updated={n:m.n,x:parseFloat(document.getElementById('fX').value)||50,y:parseFloat(document.getElementById('fY').value)||50,
+      name:document.getElementById('fName').value,at:document.getElementById('fAt').value,
+      ga:document.getElementById('fGa').value,ca:document.getElementById('fCa').value};
+    if(isNew){page.markers.push(updated);state.selectedMarker=page.markers.length-1}
+    else{page.markers[idx]=updated;state.selectedMarker=idx}
+    page.updatedAt=new Date().toISOString().slice(0,10);
+    saveData();closeModal();render();
+  };
+  if(!isNew){document.getElementById('fDel').onclick=()=>{
+    if(!confirm('確定刪除？'))return;
+    page.markers.splice(idx,1);page.markers.forEach((mk,i)=>mk.n=i+1);
+    page.updatedAt=new Date().toISOString().slice(0,10);
+    saveData();state.selectedMarker=null;state.pinnedTooltip=false;closeModal();render();
+  }}
+}
+
+function openPageForm(){
+  const node=findNode(state.data.tree,state.activeNodeId);
+  const page=state.data.pages[node.pageId];
+  showModal(`<h3>編輯頁面資訊</h3>
+    <div class="tc-form-row"><label>頁面標題</label><input id="pTitle" value="${escAttr(page.title)}"/></div>
+    <div class="tc-form-row"><label>頁面網址</label><input id="pUrl" value="${escAttr(page.url||'')}"/></div>
+    <div class="tc-form-actions"><button class="tc-btn" id="pCancel">取消</button><button class="tc-btn tc-btn-primary" id="pSave">儲存</button></div>`);
+  document.getElementById('pCancel').onclick=closeModal;
+  document.getElementById('pSave').onclick=()=>{
+    page.title=document.getElementById('pTitle').value;page.url=document.getElementById('pUrl').value;
+    page.updatedAt=new Date().toISOString().slice(0,10);saveData();closeModal();render();
+  };
+}
+
+function showModal(html){const m=document.getElementById('tcModal');m.querySelector('.tc-modal').innerHTML=html;m.classList.remove('hidden')}
+function closeModal(){document.getElementById('tcModal').classList.add('hidden')}
+
+function openPMLogin(){
+  showModal(`<h3>PM 登入</h3>
+    <div class="tc-form-row"><label>密碼</label><input type="password" id="pwInput" placeholder="預設：pm2025"/></div>
+    <div style="font-size:11px;color:var(--color-text-tertiary)">註：此為前端密碼，僅用於擋住一般瀏覽者誤改。</div>
+    <div class="tc-form-actions"><button class="tc-btn" id="pwCancel">取消</button><button class="tc-btn tc-btn-primary" id="pwOk">登入</button></div>`);
+  document.getElementById('pwCancel').onclick=closeModal;
+  document.getElementById('pwOk').onclick=()=>{
+    if(document.getElementById('pwInput').value===PM_PASSWORD){state.isPM=true;closeModal();updateLockStatus();render()}
+    else alert('密碼錯誤');
+  };
+  document.getElementById('pwInput').addEventListener('keydown',(e)=>{if(e.key==='Enter')document.getElementById('pwOk').click()});
+  setTimeout(()=>document.getElementById('pwInput').focus(),50);
+}
+
+function updateLockStatus(){
+  const el=document.getElementById('tcLockStatus');
+  if(state.isPM){
+    el.innerHTML=`<i class="ti ti-lock-open" style="color:var(--color-text-success)"></i><span style="color:var(--color-text-success)">PM 編輯權限已開啟</span>${!state.ghToken?'<button class="tc-btn" id="tcOpenSettingsBtn" style="padding:2px 6px;font-size:11px;margin-left:8px"><i class="ti ti-key"></i>設定 Token</button>':''}<button class="tc-btn" id="tcLogout" style="padding:2px 6px;font-size:11px;margin-left:8px">登出</button>`;
+    const ob=document.getElementById('tcOpenSettingsBtn');if(ob)ob.onclick=openSettingsModal;
+    document.getElementById('tcLogout').onclick=()=>{state.isPM=false;state.editMode=false;state.placingMarker=false;updateLockStatus();render()};
+  }else{
+    el.innerHTML=`<i class="ti ti-lock"></i><span>檢視模式</span>${!state.ghToken?'<button class="tc-btn" id="tcLogin" style="padding:2px 6px;font-size:11px;margin-left:8px">PM 登入</button>':''}`;
+    const lb=document.getElementById('tcLogin');if(lb)lb.onclick=openPMLogin;
+  }
+}
+
+document.getElementById('tcSearch').addEventListener('input',(e)=>{
+  const q=e.target.value.toLowerCase().trim();
+  const rb=document.getElementById('tcSearchResults');
+  if(!q){rb.style.display='none';return}
+  const results=[];
+  function walk(nodes,path){nodes.forEach(n=>{const np=[...path,n.name];
+    if(n.name.toLowerCase().includes(q))results.push({kind:'page',id:n.id,name:n.name,path:np.join(' › ')});
+    if(n.pageId){const p=state.data.pages[n.pageId];if(p){
+      if(p.title.toLowerCase().includes(q))results.push({kind:'page',id:n.id,name:p.title,path:np.join(' › ')});
+      p.markers.forEach(m=>{const txt=(m.name+m.at+m.ga+m.ca).toLowerCase();
+        if(txt.includes(q))results.push({kind:'page',id:n.id,name:`#${m.n} ${m.name}`,path:np.join(' › ')})});
+    }}
+    if(n.children)walk(n.children,np);
+  })}
+  walk(state.data.tree,[]);
+  // 同時搜尋規範總表
+  (state.data.glossary||[]).forEach(row=>{
+    const txt=(row.type+row.event+row.definition+row.parameter+row.value+row.note).toLowerCase();
+    if(txt.includes(q))results.push({kind:'glossary',id:row.id,name:`${row.event||'(未命名)'} → ${row.parameter||''}`,path:'規範總表'});
+  });
+  if(results.length===0){rb.innerHTML='<div class="tc-search-result-item">無結果</div>';rb.style.display='block';return}
+  rb.innerHTML=results.slice(0,20).map(r=>`<div class="tc-search-result-item" data-id="${r.id}" data-kind="${r.kind}"><div>${r.kind==='glossary'?'📚 ':''}${esc(r.name)}</div><div class="tc-search-result-path">${esc(r.path)}</div></div>`).join('');
+  rb.style.display='block';
+  rb.querySelectorAll('[data-id]').forEach(el=>{el.onclick=()=>{
+    if(el.dataset.kind==='glossary'){
+      state.activeView='glossary';
+      state.glossarySearch=e.target.value;
+    }else{
+      state.activeView='page';
+      state.activeNodeId=el.dataset.id;
+      let n=findParent(state.data.tree,el.dataset.id);
+      while(n){state.expandedNodes.add(n.id);n=findParent(state.data.tree,n.id)}
+    }
+    e.target.value='';rb.style.display='none';render();
+  }});
+});
+document.addEventListener('click',(e)=>{if(!e.target.closest('#tcSearch')&&!e.target.closest('#tcSearchResults')){const rb=document.getElementById('tcSearchResults');if(rb)rb.style.display='none'}});
+
+// === GitHub 整合 ===
+
+function b64encode(str){return btoa(unescape(encodeURIComponent(str)))}
+function b64decode(b64){try{return decodeURIComponent(escape(atob(b64.replace(/\s/g,''))))}catch(e){return atob(b64.replace(/\s/g,''))}}
+
+function setCloudStatus(s,msg){state.cloudStatus=s;renderCloudUI(msg)}
+
+function renderCloudUI(extraMsg){
+  const cs=document.getElementById('tcCloudStatus');
+  const ca=document.getElementById('tcCloudActions');
+  const aa=document.getElementById('tcAppActions');
+  if(!cs||!ca||!aa)return;
+  const dotMap={idle:{cls:'',label:'未連線'},loading:{cls:'syncing',label:'載入中…'},synced:{cls:'synced',label:'已同步'},dirty:{cls:'dirty',label:'有未儲存變更'},saving:{cls:'syncing',label:'儲存中…'},error:{cls:'error',label:extraMsg||'錯誤'},offline:{cls:'offline',label:'離線（無 Token）'}};
+  const cur=dotMap[state.cloudStatus]||dotMap.idle;
+  cs.innerHTML=`<span class="tc-cloud-dot ${cur.cls}"></span><span>${esc(cur.label)}</span>`;
+  // 上方按鈕：未登入 PM 顯示「設定」；登入後顯示 reload / save
+  let topBtns='';
+  if(!state.ghToken){
+    topBtns=`<button class="tc-btn" id="tcReloadBtn" title="從雲端重新載入"><i class="ti ti-refresh"></i>重新整理</button>`;
+  }
+  aa.innerHTML=topBtns;
+  const rb=document.getElementById('tcReloadBtn');if(rb)rb.onclick=()=>loadFromCloud();
+  // 底部動作區（維護者）
+  if(state.ghToken){
+    ca.innerHTML=`
+      <button class="tc-btn ${state.dirty?'tc-btn-primary':''}" id="tcSaveCloud"${state.cloudStatus==='saving'?' disabled':''}><i class="ti ti-cloud-upload"></i>儲存到雲端${state.dirty?' *':''}</button>
+      <button class="tc-btn" id="tcReloadCloud"><i class="ti ti-refresh"></i>載入最新</button>
+      <button class="tc-btn" id="tcOpenSettings"><i class="ti ti-settings"></i></button>
+    `;
+    document.getElementById('tcSaveCloud').onclick=()=>saveToCloud();
+    document.getElementById('tcReloadCloud').onclick=()=>{if(state.dirty&&!confirm('您有未儲存的變更，重新載入會覆蓋。確定？'))return;loadFromCloud()};
+    document.getElementById('tcOpenSettings').onclick=()=>openSettingsModal();
+  }else{
+    ca.innerHTML='';
+  }
+}
+
+async function loadFromCloud(){
+  setCloudStatus('loading');
+  try{
+    const url=GH_RAW+GH_DATA_PATH+'?t='+Date.now();
+    const r=await fetch(url,{cache:'no-store'});
+    if(!r.ok){
+      if(r.status===404){
+        // 首次部署，repo 沒有 data.json
+        state.data=JSON.parse(JSON.stringify(seedData));
+        setCloudStatus('idle','尚未有雲端資料');
+        render();
+        return;
+      }
+      throw new Error('讀取失敗 HTTP '+r.status);
+    }
+    const obj=await r.json();
+    state.data=obj;
+    state.dirty=false;
+    state.initialLoaded=true;
+    // 取得 sha（給未來儲存用）
+    if(state.ghToken)await fetchDataSha();
+    setCloudStatus('synced');
+    render();
+  }catch(e){
+    console.error(e);
+    // 載入本地備份
+    try{const v=localStorage.getItem(STORAGE_KEY);if(v){state.data=JSON.parse(v);render()}}catch(e2){}
+    if(!state.data)state.data=JSON.parse(JSON.stringify(seedData));
+    setCloudStatus('error','雲端載入失敗');
+    render();
+  }
+}
+
+async function fetchDataSha(){
+  try{
+    const r=await fetch(GH_API+'/contents/'+GH_DATA_PATH+'?ref='+GH_BRANCH,{
+      headers:{'Authorization':'Bearer '+state.ghToken,'Accept':'application/vnd.github+json'}
+    });
+    if(r.ok){const j=await r.json();state.ghDataSha=j.sha||''}
+    else if(r.status===404){state.ghDataSha=''}
+  }catch(e){console.error(e)}
+}
+
+async function saveToCloud(){
+  if(!state.ghToken){alert('未設定 GitHub Token');return}
+  setCloudStatus('saving');
+  try{
+    // 先確保拿到最新 sha
+    await fetchDataSha();
+    const body={
+      message:`Update tracking data ${new Date().toISOString()}`,
+      content:b64encode(JSON.stringify(state.data,null,2)),
+      branch:GH_BRANCH
+    };
+    if(state.ghDataSha)body.sha=state.ghDataSha;
+    const r=await fetch(GH_API+'/contents/'+GH_DATA_PATH,{
+      method:'PUT',
+      headers:{'Authorization':'Bearer '+state.ghToken,'Accept':'application/vnd.github+json','Content-Type':'application/json'},
+      body:JSON.stringify(body)
+    });
+    if(!r.ok){
+      const err=await r.json().catch(()=>({}));
+      throw new Error(err.message||('HTTP '+r.status));
+    }
+    const j=await r.json();
+    if(j.content&&j.content.sha)state.ghDataSha=j.content.sha;
+    state.dirty=false;
+    setCloudStatus('synced');
+    // 同時備份到 localStorage
+    try{localStorage.setItem(STORAGE_KEY,JSON.stringify(state.data))}catch(e){}
+  }catch(e){
+    console.error(e);
+    setCloudStatus('error','儲存失敗：'+e.message);
+    alert('儲存到 GitHub 失敗：\n'+e.message+'\n\n請檢查：\n1. Token 是否正確\n2. Token 是否有 repo 權限\n3. 網路是否正常');
+  }
+}
+
+async function uploadImage(dataUrl,filename){
+  if(!state.ghToken)return dataUrl;
+  // 萃取 base64 內容
+  const base64=dataUrl.split(',')[1];
+  const path=GH_IMG_DIR+'/'+filename;
+  try{
+    // 確認是否已存在（取得 sha）
+    let sha='';
+    try{
+      const chk=await fetch(GH_API+'/contents/'+path+'?ref='+GH_BRANCH,{headers:{'Authorization':'Bearer '+state.ghToken}});
+      if(chk.ok){const j=await chk.json();sha=j.sha||''}
+    }catch(e){}
+    const body={message:`Upload screenshot ${filename}`,content:base64,branch:GH_BRANCH};
+    if(sha)body.sha=sha;
+    const r=await fetch(GH_API+'/contents/'+path,{
+      method:'PUT',
+      headers:{'Authorization':'Bearer '+state.ghToken,'Accept':'application/vnd.github+json','Content-Type':'application/json'},
+      body:JSON.stringify(body)
+    });
+    if(!r.ok){const err=await r.json().catch(()=>({}));throw new Error(err.message||('HTTP '+r.status))}
+    return GH_RAW+path;
+  }catch(e){
+    console.error('Image upload failed',e);
+    alert('截圖上傳失敗：'+e.message+'\n\n截圖會暫存於本機，儲存到雲端時會再試。');
+    return dataUrl;
+  }
+}
+
+function markDirty(){state.dirty=true;setCloudStatus('dirty');try{localStorage.setItem(STORAGE_KEY,JSON.stringify(state.data))}catch(e){}}
+
+function openSettingsModal(){
+  showModal(`<h3>GitHub 設定</h3>
+    <div class="tc-form-row">
+      <label>GitHub Personal Access Token</label>
+      <input type="password" id="ghTokenInput" value="${escAttr(state.ghToken)}" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx"/>
+    </div>
+    <div class="tc-token-help">
+      <div><strong>Repo：</strong><code>${GH_OWNER}/${GH_REPO}</code></div>
+      <div><strong>需要權限：</strong>repo（完整 repo 存取）</div>
+      <div style="margin-top:6px">不知道怎麼取得 Token？<a href="https://github.com/settings/tokens" target="_blank" rel="noopener" style="color:var(--color-text-info)">前往 GitHub 設定頁</a> → Personal access tokens (classic) → Generate new token，勾選 <code>repo</code> 範圍。</div>
+      <div style="margin-top:6px;color:var(--color-text-danger)"><strong>注意：</strong>Token 僅儲存於您的瀏覽器，不會上傳到任何地方。請勿在公用電腦填入。</div>
+    </div>
+    <div class="tc-form-actions">
+      ${state.ghToken?'<button class="tc-btn tc-btn-danger" id="ghClear">清除 Token（登出）</button>':''}
+      <button class="tc-btn" id="ghCancel">取消</button>
+      <button class="tc-btn tc-btn-primary" id="ghSave">儲存並驗證</button>
+    </div>`);
+  document.getElementById('ghCancel').onclick=closeModal;
+  const clr=document.getElementById('ghClear');if(clr)clr.onclick=()=>{
+    if(!confirm('清除 Token 後將回到唯讀模式，確定？'))return;
+    state.ghToken='';localStorage.removeItem(TOKEN_KEY);
+    closeModal();renderCloudUI();render();updateLockStatus();updateReadonlyBanner();
+  };
+  document.getElementById('ghSave').onclick=async()=>{
+    const tok=document.getElementById('ghTokenInput').value.trim();
+    if(!tok){alert('請輸入 Token');return}
+    // 驗證 token：用 /user endpoint（最穩定，會回傳使用者資訊）
+    try{
+      const r=await fetch('https://api.github.com/user',{headers:{'Authorization':'Bearer '+tok,'Accept':'application/vnd.github+json'}});
+      if(!r.ok){
+        if(r.status===401)throw new Error('Token 無效或已過期，請重新申請');
+        throw new Error('Token 驗證失敗 HTTP '+r.status);
+      }
+      const userInfo=await r.json();
+      // 再確認對該 Repo 有寫入權限
+      const r2=await fetch(GH_API,{headers:{'Authorization':'Bearer '+tok,'Accept':'application/vnd.github+json'}});
+      if(!r2.ok){
+        if(r2.status===404)throw new Error(`找不到 Repo「${GH_OWNER}/${GH_REPO}」，請確認您已被加為 Collaborator`);
+        throw new Error('無法存取 Repo HTTP '+r2.status);
+      }
+      const repoInfo=await r2.json();
+      if(!repoInfo.permissions||!repoInfo.permissions.push){
+        throw new Error('此 Token 沒有 Repo 寫入權限，請申請時勾選 repo 範圍');
+      }
+      state.ghToken=tok;
+      localStorage.setItem(TOKEN_KEY,tok);
+      closeModal();
+      await fetchDataSha();
+      setCloudStatus('synced');
+      updateReadonlyBanner();
+      render();
+      alert(`已連線成功！\n使用者：${userInfo.login}\nRepo：${repoInfo.full_name}`);
+    }catch(e){alert(e.message)}
+  };
+  setTimeout(()=>document.getElementById('ghTokenInput').focus(),50);
+}
+
+function updateReadonlyBanner(){
+  const b=document.getElementById('tcReadonlyBanner');
+  if(!b)return;
+  b.style.display=state.ghToken?'none':'block';
+}
+
+function esc(s){return String(s||'').replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function escAttr(s){return esc(s)}
+function updateGlossaryEntry(){
+  const entry=document.getElementById('tcGlossaryEntry');
+  if(!entry)return;
+  entry.classList.toggle('active',state.activeView==='glossary');
+  const badge=document.getElementById('tcGlossaryCount');
+  if(badge)badge.textContent=(state.data.glossary||[]).length;
+  entry.onclick=()=>{
+    state.activeView='glossary';
+    state.pinnedTooltip=false;hideTooltip();
+    const sp=document.getElementById('tcSidePanel');if(sp)sp.remove();
+    render();
+  };
+}
+
+function render(){renderTree();renderMain();updateTreeActions();updateGlossaryEntry()}
+
+loadData();
+updateLockStatus();
+updateReadonlyBanner();
+renderCloudUI();
+render();
+// 啟動後嘗試從雲端拉最新（會覆蓋本機）
+loadFromCloud();
+})();
+</script>
+</body>
+</html>
