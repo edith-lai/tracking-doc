@@ -184,6 +184,15 @@
           "at": "",
           "ga": "data-ga-event=\"inbound_click_free_download\"\ndata-ga-click_point=\"In_Page_Agentic_AI\"\ndata-ga-product=\"PowerDirector 365\"\ndata-ga-type=\"Button_free_download\"",
           "ca": ""
+        },
+        {
+          "n": 4,
+          "x": 49.5,
+          "y": 28.2,
+          "name": "",
+          "at": "",
+          "ga": "",
+          "ca": ""
         }
       ]
     },
