@@ -160,8 +160,8 @@
       "markers": [
         {
           "n": 1,
-          "x": 15.1,
-          "y": 6.4,
+          "x": 15.486307837582626,
+          "y": 6.42750528987841,
           "name": "Top banner D/L",
           "at": "data-at-location=\"top-banner\"\ndata-at-id=\"download-button\"",
           "ga": "data-ga-event=\"inbound_click_free_download\"\ndata-ga-click_point=\"Top_Banner\"\ndata-ga-product=\"PowerDirector\"\ndata-ga-type=\"Button_free_download\"",
