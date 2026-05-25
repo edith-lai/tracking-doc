@@ -157,7 +157,26 @@
       "url": "",
       "updatedAt": "2026-05-25",
       "screenshot": "https://raw.githubusercontent.com/edith-lai/tracking-doc/main/screenshots/page-mpkms23mj3l-1779678768536.png",
-      "markers": []
+      "markers": [
+        {
+          "n": 1,
+          "x": 15.1,
+          "y": 6.4,
+          "name": "Top banner D/L",
+          "at": "data-at-location=\"top-banner\"\ndata-at-id=\"download-button\"",
+          "ga": "data-ga-event=\"inbound_click_free_download\"\ndata-ga-click_point=\"Top_Banner\"\ndata-ga-product=\"PowerDirector\"\ndata-ga-type=\"Button_free_download\"",
+          "ca": "data-clt-event=\"inbound_click_free_download\"\ndata-clt-click_point=\"Top_Banner\"\ndata-clt-product=\"PowerDirector\"\ndata-clt-type=\"Button_free_download\""
+        },
+        {
+          "n": 2,
+          "x": 27.6,
+          "y": 6.4,
+          "name": "Top banner Buy button",
+          "at": "data-at-location=\"top-banner\"\ndata-at-id=\"buy-button\"",
+          "ga": "data-ga-event=\"inbound_click_buy_button\"\ndata-ga-click_point=\"Top_Banner\"\ndata-ga-product=\"PowerDirector\"\ndata-ga-type=\"Button_buy_now\"",
+          "ca": "data-clt-event=\"inbound_click_buy_button\"\ndata-clt-click_point=\"Top_Banner\"\ndata-clt-product=\"PowerDirector\"\ndata-clt-type=\"Button_buy_now\""
+        }
+      ]
     },
     "page-mpkms8noxi4": {
       "title": "Pricing",
