@@ -175,6 +175,15 @@
           "at": "data-at-location=\"top-banner\"\ndata-at-id=\"buy-button\"",
           "ga": "data-ga-event=\"inbound_click_buy_button\"\ndata-ga-click_point=\"Top_Banner\"\ndata-ga-product=\"PowerDirector\"\ndata-ga-type=\"Button_buy_now\"",
           "ca": "data-clt-event=\"inbound_click_buy_button\"\ndata-clt-click_point=\"Top_Banner\"\ndata-clt-product=\"PowerDirector\"\ndata-clt-type=\"Button_buy_now\""
+        },
+        {
+          "n": 3,
+          "x": 64.9,
+          "y": 16.1,
+          "name": "",
+          "at": "",
+          "ga": "data-ga-event=\"inbound_click_free_download\"\ndata-ga-click_point=\"In_Page_Agentic_AI\"\ndata-ga-product=\"PowerDirector 365\"\ndata-ga-type=\"Button_free_download\"",
+          "ca": ""
         }
       ]
     },
