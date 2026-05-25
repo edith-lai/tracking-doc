@@ -160,8 +160,8 @@
       "markers": [
         {
           "n": 1,
-          "x": 15.486307837582626,
-          "y": 6.42750528987841,
+          "x": 14.498100676648424,
+          "y": 6.248028046205443,
           "name": "Top banner D/L",
           "at": "data-at-location=\"top-banner\"\ndata-at-id=\"download-button\"",
           "ga": "data-ga-event=\"inbound_click_free_download\"\ndata-ga-click_point=\"Top_Banner\"\ndata-ga-product=\"PowerDirector\"\ndata-ga-type=\"Button_free_download\"",
@@ -169,7 +169,7 @@
         },
         {
           "n": 2,
-          "x": 27.6,
+          "x": 28.4,
           "y": 6.4,
           "name": "Top banner Buy button",
           "at": "data-at-location=\"top-banner\"\ndata-at-id=\"buy-button\"",
@@ -178,21 +178,66 @@
         },
         {
           "n": 3,
-          "x": 63.6,
-          "y": 16,
+          "x": 49.98945270851665,
+          "y": 96.6922556470939,
           "name": "",
-          "at": "",
-          "ga": "data-ga-event=\"inbound_click_free_download\"\ndata-ga-click_point=\"In_Page_Agentic_AI\"\ndata-ga-product=\"PowerDirector 365\"\ndata-ga-type=\"Button_free_download\"",
-          "ca": ""
+          "at": "data-at-location=\"body\"\ndata-at-id=\"download-button\"",
+          "ga": "data-ga-event=\"inbound_click_free_download\"\ndata-ga-click_point=\"In_Page_Trusted_by\"\ndata-ga-product=\"PowerDirector 365\"\ndata-ga-type=\"Button_free_download\"\n",
+          "ca": "data-clt-event=\"inbound_click_free_download\"\ndata-clt-click_point=\"In_Page_Trusted_by\"\ndata-clt-product=\"PowerDirector\"\ndata-clt-type=\"Button_free_download\""
         },
         {
           "n": 4,
-          "x": 49.5,
-          "y": 28.2,
-          "name": "",
-          "at": "",
-          "ga": "",
-          "ca": ""
+          "x": 65.9,
+          "y": 16,
+          "name": "Tell your story DL (P1)",
+          "at": "data-at-location=\"body\"\ndata-at-id=\"download-button\"\n",
+          "ga": "data-ga-event=\"inbound_click_free_download\"\ndata-ga-click_point=\"In_Page_Agentic_AI\"\ndata-ga-product=\"PowerDirector 365\"\ndata-ga-type=\"Button_free_download\"",
+          "ca": "data-clt-event=\"inbound_click_free_download\"\ndata-clt-click_point=\"In_Page_Agentic_AI\"\ndata-clt-product=\"PowerDirector 365\"\ndata-clt-type=\"Button_free_download\""
+        },
+        {
+          "n": 5,
+          "x": 50.5,
+          "y": 28,
+          "name": "AI Storytelling",
+          "at": "data-at-location=\"body\"\ndata-at-id=\"download-button\"\n",
+          "ga": "data-ga-event=\"inbound_click_free_download\"\ndata-ga-click_point=\"In_Page_AI_Storytelling\"\ndata-ga-product=\"PowerDirector 365\"\ndata-ga-type=\"Button_free_download\"",
+          "ca": "data-clt-event=\"inbound_click_free_download\"\ndata-clt-click_point=\"In_Page_AI_Storytelling\"\ndata-clt-product=\"PowerDirector 365\"\ndata-clt-type=\"Button_free_download\""
+        },
+        {
+          "n": 6,
+          "x": 44.3,
+          "y": 38.6,
+          "name": "Auto Edit try now botton",
+          "at": "data-at-location=\"body\"\ndata-at-id=\"download-button\"",
+          "ga": "data-ga-event=\"inbound_click_free_download\"\ndata-ga-click_point=\"In_Page_Auto_Edit\"\ndata-ga-product=\"PowerDirector 365\"\ndata-ga-type=\"Button_free_download\"",
+          "ca": "data-clt-event=\"inbound_click_free_download\"\ndata-clt-click_point=\"In_Page_Auto_Edit\"\ndata-clt-product=\"PowerDirector 365\"\ndata-clt-type=\"Button_free_download\""
+        },
+        {
+          "n": 7,
+          "x": 55.4,
+          "y": 38.6,
+          "name": "Auto Edit find out more botton",
+          "at": "data-at-location=\"body\"\ndata-at-id=\"custom-button\"",
+          "ga": "data-ga-event=\"inbound_click_custom_button\"\ndata-ga-click_point=\"In_Page_Auto_Edit\"\ndata-ga-type=\"Button_custom_cta\"\n",
+          "ca": "data-clt-event=\"inbound_click_custom_button\"\ndata-clt-click_point=\"In_Page_Auto_Edit\"\ndata-clt-type=\"Button_custom_cta\""
+        },
+        {
+          "n": 8,
+          "x": 19.8,
+          "y": 47.3,
+          "name": "AI Video",
+          "at": "data-at-location=\"body\"\ndata-at-id=\"download-button\"",
+          "ga": "data-ga-event=\"inbound_click_free_download\"\ndata-ga-click_point=\"In_Page_AI_Image_to_Video\"\ndata-ga-product=\"PowerDirector 365\"\ndata-ga-type=\"Button_free_download\"",
+          "ca": "data-clt-event=\"inbound_click_free_download\"\ndata-clt-click_point=\"In_Page_AI_Image_to_Video\"\ndata-clt-product=\"PowerDirector 365\"\ndata-clt-type=\"Button_free_download\""
+        },
+        {
+          "n": 9,
+          "x": 63.5,
+          "y": 68,
+          "name": "AI Video DL (P1)",
+          "at": "data-at-location=\"horizontal-slider\"\ndata-at-id=\"download-button\"\n",
+          "ga": "data-ga-event=\"inbound_click_free_download\"\ndata-ga-click_point=\"In_Page_AI_Video_Enhancement\"\ndata-ga-product=\"PowerDirector 365\"\ndata-ga-type=\"Button_free_download\"",
+          "ca": "data-clt-event=\"inbound_click_free_download\"\ndata-clt-click_point=\"In_Page_AI_Video_Enhancement\"\ndata-clt-product=\"PowerDirector 365\"\ndata-clt-type=\"Button_free_download\""
         }
       ]
     },
